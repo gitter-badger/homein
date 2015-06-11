@@ -14,6 +14,7 @@ class PlacesController < ApplicationController
       marker.lat place.latitude
       marker.lng place.longitude
       marker.infowindow place.description 
+      marker.json({:id => "place_#{place.id}_marker" })
     end
   end
 
