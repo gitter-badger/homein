@@ -2,20 +2,22 @@
 
 one:
   description: MyString
+  address: MyString
   latitude: 1.5
   longitude: 1.5
-  price: 1
   rooms: 1
   bathrooms: 1
   available: false
+  price: 1
   contact: MyString
 
 two:
   description: MyString
+  address: MyString
   latitude: 1.5
   longitude: 1.5
-  price: 1
   rooms: 1
   bathrooms: 1
   available: false
+  price: 1
   contact: MyString
