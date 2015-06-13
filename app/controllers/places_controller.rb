@@ -10,12 +10,6 @@ class PlacesController < ApplicationController
   # GET /places/1
   # GET /places/1.json
   def show
-    @hash = Gmaps4rails.build_markers(@place) do |place, marker|
-      marker.lat place.latitude
-      marker.lng place.longitude
-      marker.infowindow place.description 
-      marker.json({:id => "place_#{place.id}_marker" })
-    end
   end
 
   # GET /places/new
