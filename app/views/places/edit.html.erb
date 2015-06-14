@@ -1,6 +1,10 @@
+<% content_for(:body_attributes) do %>
+  data-no-turbolink="true"
+<% end %>
+
 <h1>Editing Place</h1>
 
-<%= render partial: 'editable_map' %>
+<%= render 'editable_map' %>
 
 <%= render 'form' %>
 
