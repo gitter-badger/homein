@@ -31,6 +31,8 @@
 
     function setLatLng() {
       var position = marker.getPosition()
+      document.forms['edit_place_<%= params["id"] %>'].place_latitude.value = position.A
+      document.forms['edit_place_<%= params["id"] %>'].place_longitude.value = position.F 
       map.panTo(position);
       console.log(position);
     };
