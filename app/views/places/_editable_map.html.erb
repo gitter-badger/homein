@@ -34,7 +34,8 @@
       document.forms['edit_place_<%= params["id"] %>'].place_latitude.value = position.A
       document.forms['edit_place_<%= params["id"] %>'].place_longitude.value = position.F 
       map.panTo(position);
-      console.log(position);
+
+      reverseGeocode();
     };
   };
 
@@ -52,6 +53,21 @@
       } else {
         alert('Geocode unsucessful because of: ' + status);
       }
+    });
+  }
+
+  function reverseGeocode() {
+    var latitude = document.forms['edit_place_<%= params["id"] %>'].place_latitude.value;
+    var longitude = document.forms['edit_place_<%= params["id"] %>'].place_longitude.value;
+
+    var latLng = new google.maps.LatLng(latitude, longitude);
+
+    geocoder.geocode( { 'latLng' : latLng }, function(results, status) {
+      console.log(results);
+
+      var address = results[0].address_components[0].long_name + ", " + results[0].address_components[1].long_name + ", " + results[0].address_components[2].long_name + ", " + results[0].address_components[3].long_name + ", " + results[0].address_components[4].long_name;
+
+      document.forms['edit_place_<%= params["id"] %>'].place_address.value = address;
     });
   }
 
