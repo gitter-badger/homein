@@ -6,6 +6,9 @@
 <script type="text/javascript">
   var geocoder;
   var map;
+  var infowindow;
+  var infoWindowContent;
+  
 
   function initialize() {
     geocoder = new google.maps.Geocoder();
@@ -16,8 +19,18 @@
       zoom: 17, 
       center: myLatLng
     };
+    
+    infoWindowContent = "<h2><%= @place.address %></h2><br />" + 
+    "<%= @place.description %><br />" +
+    "<hr />" + 
+    "<strong>Rooms:</strong> <%= @place.rooms %>, <strong>Bathrooms:</strong> <%= @place.bathrooms %><br />" + 
+    "<strong>Available:</strong> <%= @place.available ? 'Yes' : 'No' %>";
+    
+    infowindow = new google.maps.InfoWindow({
+        content: infoWindowContent
+    });
 
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
 
     var marker = new google.maps.Marker({
       position: myLatLng,
@@ -26,6 +39,10 @@
       draggable: false,
       animation: google.maps.Animation.DROP 
     });
+    
+      google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+      });  
   };
 
   google.maps.event.addDomListener(window, 'load', initialize);
