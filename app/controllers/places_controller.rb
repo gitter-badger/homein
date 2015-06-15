@@ -1,6 +1,7 @@
 class PlacesController < ApplicationController
   before_action :set_place, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:edit, :update, :destroy, :create, :new]
+  before_action :authorize_user, only: [:edit, :update, :destroy]
 
   # GET /places
   # GET /places.json
@@ -68,6 +69,14 @@ class PlacesController < ApplicationController
     def set_place
       @place = Place.find(params[:id])
     end
+
+    def authorize_user 
+      if @place.user != current_user
+        flash.alert = "You're not authorized to do that!"
+
+        redirect_to root_path
+      end 
+    end 
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params

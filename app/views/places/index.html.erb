@@ -34,8 +34,10 @@
         <td><%= place.contact %></td>
         <td><%= link_to 'Show', place %></td>
         <% if user_signed_in? %>
-          <td><%= link_to 'Edit', edit_place_path(place) %></td>
-          <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% if place.user == current_user %>
+            <td><%= link_to 'Edit', edit_place_path(place) %></td>
+            <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
         <% end %>
       </tr>
     <% end %>
