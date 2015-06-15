@@ -2,8 +2,6 @@
   data-no-turbolink="true"
 <% end %>
 
-<p id="notice"><%= notice %></p>
-
 <%= render partial: 'map' %>
 
 <p>
@@ -51,5 +49,7 @@
   <%= @place.contact %>
 </p>
 
-<%= link_to 'Edit', edit_place_path(@place) %> |
+<% if user_signed_in? %>
+<%= link_to 'Edit', edit_place_path(@place) %>
+<% end %> |
 <%= link_to 'Back', places_path %>

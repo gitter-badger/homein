@@ -2,8 +2,6 @@
   data-no-turbolink="true"
 <% end %>
 
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Places</h1>
 
 <table>
@@ -35,8 +33,10 @@
         <td><%= place.price %></td>
         <td><%= place.contact %></td>
         <td><%= link_to 'Show', place %></td>
-        <td><%= link_to 'Edit', edit_place_path(place) %></td>
-        <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if user_signed_in? %>
+          <td><%= link_to 'Edit', edit_place_path(place) %></td>
+          <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
@@ -44,4 +44,6 @@
 
 <br>
 
-<%= link_to 'New Place', new_place_path %>
+<% if user_signed_in? %>
+  <%= link_to 'New Place', new_place_path %>
+<% end %>
