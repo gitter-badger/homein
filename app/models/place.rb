@@ -7,5 +7,6 @@ class Place < ActiveRecord::Base
 	    boolean :available
 	    integer :rooms
 	    integer :bathrooms
+	    integer :price
 	end 
 end

@@ -1,0 +1,41 @@
+<%= form_tag search_places_path do %>
+  <div class="field">
+    <%= label_tag :description %><br>
+    <%= text_field_tag :description %>
+  </div>
+  <div class="field">
+    <%= label_tag :address %><br>
+    <%= text_field_tag :address %>
+  </div>
+  <div class="field">
+    <%= label_tag :latitude %><br>
+    <%= text_field_tag :latitude %>
+  </div>
+  <div class="field">
+    <%= label_tag :longitude %><br>
+    <%= text_field_tag :longitude %>
+  </div>
+  <div class="field">
+    <%= label_tag :rooms %><br>
+    <%= number_field_tag :rooms %>
+  </div>
+  <div class="field">
+    <%= label_tag :bathrooms %><br>
+    <%= number_field_tag :bathrooms %>
+  </div>
+  <div class="field">
+    <%= label_tag :available %><br>
+    <%= check_box_tag :available %>
+  </div>
+  <div class="field">
+    <%= label_tag :price %><br>
+    <%= number_field_tag :price %>
+  </div>
+  <div class="field">
+    <%= label_tag :contact %><br>
+    <%= text_field_tag :contact %>
+  </div>
+  <div class="actions">
+    <%= submit_tag "Search" %>
+  </div>
+<% end %>

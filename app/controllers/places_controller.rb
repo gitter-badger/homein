@@ -68,9 +68,17 @@ class PlacesController < ApplicationController
   
   def search
       search = Place.search do 
-          keywords(params[:query])
+          if params[:query]
+            fulltext params[:query]
+          else 
+            fulltext params[:description]
+            fulltext params[:address]
+
+            with(:rooms).greater_than_or_equal_to(params[:rooms])
+            with(:bathrooms).greater_than_or_equal_to(params[:bathrooms])
+          end 
       end 
-      
+
       @places = search.results
       
       render 'index' 
