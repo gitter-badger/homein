@@ -4,6 +4,10 @@
 
 <h1>Listing Places</h1>
 
+<%= form_tag search_places_path do %>
+    <input id="searchbar" name="query" placeholder="Search places" type="text">
+<% end %>
+
 <table>
   <thead>
     <tr>

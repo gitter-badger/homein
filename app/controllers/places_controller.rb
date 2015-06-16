@@ -65,6 +65,16 @@ class PlacesController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def search
+      search = Place.search do 
+          keywords(params[:query])
+      end 
+      
+      @places = search.results
+      
+      render 'index' 
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.
