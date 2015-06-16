@@ -29,6 +29,10 @@
 	</li>
 <% end %>
 
+<%= form_tag search_places_path do %>
+    <input id="searchbar" name="query" placeholder="Search places" type="text">
+<% end %>
+
 <%= yield %>
 
 </body>
