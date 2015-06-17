@@ -78,10 +78,10 @@ class PlacesController < ApplicationController
               keywords params[:address], :fields => [:address]
             end 
 
-            with(:rooms).greater_than_or_equal_to(params[:rooms])
-            with(:bathrooms).greater_than_or_equal_to(params[:bathrooms])
+            with(:rooms).greater_than_or_equal_to(params[:rooms].to_i)
+            with(:bathrooms).greater_than_or_equal_to(params[:bathrooms].to_i)
             with(:available).equal_to(params[:available])
-            with(:price.to_i).less_than_or_equal_to(params[:price].to_i)
+            with(:price).less_than_or_equal_to(params[:price].to_i)
           end 
       end 
 
