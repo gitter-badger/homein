@@ -66,9 +66,13 @@ class PlacesController < ApplicationController
   end
   
   def search
-      @places = Place.where("address LIKE ?", "%#{params[:query]}%") 
+    if params[:query]
+      @places = Place.where("address LIKE ? OR description LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") 
       
       render 'index' 
+    else 
+      fail "Advanced search is back!?"
+    end 
   end 
 
   private
