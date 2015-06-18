@@ -66,30 +66,7 @@ class PlacesController < ApplicationController
   end
   
   def search
-      search = Place.search do 
-          if params[:query]
-            fulltext params[:query]
-            
-            with(:available).equal_to(true) 
-          else 
-            if params[:description]
-              keywords params[:description], :fields => [:description]
-            end 
-            if params[:address]
-              keywords params[:address], :fields => [:address]
-            end 
-
-            with(:rooms).greater_than_or_equal_to(params[:rooms].to_i)
-            with(:bathrooms).greater_than_or_equal_to(params[:bathrooms].to_i)
-            with(:available).equal_to(true) 
-            
-            if params[:price].to_i > 0
-                with(:price).less_than_or_equal_to(params[:price].to_i)
-            end
-          end 
-      end 
-
-      @places = search.results
+      @places = Place.where("address LIKE ?", "%#{params[:query]}%") 
       
       render 'index' 
   end 

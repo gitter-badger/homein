@@ -28,12 +28,6 @@ gem 'high_voltage'
 # Authentication with devise
 gem 'devise'
 
-# Search by sunspot... I get the feeling this is MASSIVE overkill right now
-gem 'sunspot_rails'
-  
-# Apparently this is needed for development 
-gem 'sunspot_solr'
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
