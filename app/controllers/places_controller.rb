@@ -71,7 +71,28 @@ class PlacesController < ApplicationController
       
       render 'index' 
     else 
-      fail "Advanced search is back!?"
+      if params[:price].to_i > 0
+        @places = Place.where(
+          "description LIKE ? AND address LIKE ? AND rooms > ? AND bathrooms > ? AND price <= ?", 
+          "%#{params[:description]}%", 
+          "%#{params[:address]}%", 
+          params[:rooms].to_i, 
+          params[:bathrooms].to_i,
+          params[:price].to_i
+        )
+
+        render 'index'
+      else 
+        @places = Place.where(
+          "description LIKE ? AND address LIKE ? AND rooms > ? AND bathrooms > ?", 
+          "%#{params[:description]}%", 
+          "%#{params[:address]}%", 
+          params[:rooms].to_i, 
+          params[:bathrooms].to_i
+        )
+
+        render 'index'
+      end
     end 
   end 
 
