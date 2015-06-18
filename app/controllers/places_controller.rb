@@ -17,7 +17,6 @@ class PlacesController < ApplicationController
   # GET /places/new
   def new
     @place = Place.new
-    @te
   end
 
   # GET /places/1/edit
