@@ -69,6 +69,8 @@ class PlacesController < ApplicationController
       search = Place.search do 
           if params[:query]
             fulltext params[:query]
+            
+            with(:available).equal_to(true) 
           else 
             if params[:description]
               keywords params[:description], :fields => [:description]
@@ -79,7 +81,7 @@ class PlacesController < ApplicationController
 
             with(:rooms).greater_than_or_equal_to(params[:rooms].to_i)
             with(:bathrooms).greater_than_or_equal_to(params[:bathrooms].to_i)
-            with(:available).equal_to(params[:available])
+            with(:available).equal_to(true) 
             
             if params[:price].to_i > 0
                 with(:price).less_than_or_equal_to(params[:price].to_i)
