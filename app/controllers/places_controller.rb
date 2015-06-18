@@ -80,7 +80,10 @@ class PlacesController < ApplicationController
             with(:rooms).greater_than_or_equal_to(params[:rooms].to_i)
             with(:bathrooms).greater_than_or_equal_to(params[:bathrooms].to_i)
             with(:available).equal_to(params[:available])
-            with(:price).less_than_or_equal_to(params[:price].to_i)
+            
+            if params[:price].to_i > 0
+                with(:price).less_than_or_equal_to(params[:price].to_i)
+            end
           end 
       end 
 
