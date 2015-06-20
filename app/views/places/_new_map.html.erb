@@ -29,15 +29,15 @@
     });
 
     google.maps.event.addListener(marker, 'dragend', setLatLng);
+  };
 
-    function setLatLng() {
-      var position = marker.getPosition()
-      document.forms['new_place'].place_latitude.value = position.A
-      document.forms['new_place'].place_longitude.value = position.F 
-      map.panTo(position);
+  function setLatLng() {
+    var position = marker.getPosition()
+    document.forms['new_place'].place_latitude.value = position.A
+    document.forms['new_place'].place_longitude.value = position.F 
+    map.panTo(position);
 
-      reverseGeocode();
-    };
+    reverseGeocode();
   };
 
   function codeAddress() {
@@ -47,6 +47,10 @@
       if (status == google.maps.GeocoderStatus.OK) {
         map.setCenter(results[0].geometry.location);
         marker.setPosition(results[0].geometry.location);
+
+        setLatLng();
+
+        reverseGeocode();
       } else {
         alert('Geocode unsucessful because of: ' + status);
       }
