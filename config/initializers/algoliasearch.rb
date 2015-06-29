@@ -1,0 +1,1 @@
+AlgoliaSearch.configuration = { application_id: '3J0AVN6KSY', api_key: ENV['algolia_admin_api_key'] }

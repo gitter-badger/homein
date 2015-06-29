@@ -32,6 +32,7 @@ class PlacesController < ApplicationController
 
     respond_to do |format|
       if @place.save
+        @place.index!
         format.html { redirect_to @place, notice: 'Place was successfully created.' }
         format.json { render :show, status: :created, location: @place }
       else
@@ -58,6 +59,7 @@ class PlacesController < ApplicationController
   # DELETE /places/1
   # DELETE /places/1.json
   def destroy
+    @place.remove_from_index!
     @place.destroy
     respond_to do |format|
       format.html { redirect_to places_url, notice: 'Place was successfully destroyed.' }
