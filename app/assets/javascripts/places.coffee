@@ -16,8 +16,7 @@ $(document).ready ->
     searchbar = $("#searchbar")
     facets_container = $("#facets-container")
     
-    places = ""
-    facets = ""
+    currentfacets = {}
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -55,14 +54,36 @@ $(document).ready ->
             facets_container.empty()
             places_container.empty()
             
-            console.log this.getAttribute('data-value')
-            search(searchbar.val(), this.getAttribute('data-facet') + ":" + this.getAttribute('data-value'))
+            currentfacet = []
+            
+            currentfacet.push this.getAttribute('data-facet')
+            currentfacet.push this.getAttribute('data-value')
+            
+            if currentfacets[currentfacet[0]]
+                console.log currentfacets
+                delete currentfacets[currentfacet[0]]
+            else 
+                currentfacets[currentfacet[0]] = currentfacet[1]
+                console.log currentfacets
+            
+            facet = this.getAttribute('data-facet') + ":" + this.getAttribute('data-value')
+            
+            queryFacets = ""
+            for facet of currentfacets
+                queryFacets += facet + ":" + currentfacets[facet] + ", "
+            
+            search(searchbar.val(), queryFacets)
+    
+    setURLParams = (query, facet) ->
+        urlParams = "#"
+        urlParams += "q=" + encodeURIComponent(query)
+        console.log urlParams
     
     search = (query, facetfilters) ->
         index.search(query, 
         {
             facets: "*"
-            facetFilters: facetfilters
+            facetFilters: facetfilters 
         },
         (err, content) ->
             if err 
@@ -76,3 +97,4 @@ $(document).ready ->
     
     searchbar.keyup ->
         search(searchbar.val())
+        setURLParams(searchbar.val())
