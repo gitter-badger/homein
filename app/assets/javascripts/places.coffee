@@ -14,17 +14,25 @@ $(document).ready ->
     # DOM initialization
     places_container = $("#places-container")
     searchbar = $("#searchbar")
+    facets_container = $("#facets-container")
     
     places = ""
+    facets = ""
     
-    search = (query) ->
-        index.search(query, (err, content) ->
+    search = (query, facetfilters) ->
+        index.search(query, 
+        {
+            facets: "*"
+            facetFilters: facetfilters
+        },
+        (err, content) ->
             if err 
-                console.log(err)
+                console.error(err)
             else
                 places = content.hits
-                
+                facets = content.facets
                 places_html = ""
+                facets_html = ""
                 
                 #Render the places
                 for place in places 
@@ -34,9 +42,33 @@ $(document).ready ->
                         "<p>Price: $" + place.price + "</p>"
                 
                 places_container.html(places_html)
+                #/Render the places
+                
+                #Render the facets
+                for facet of facets
+                    facets_html += 
+                        "<h4>" + facet + ":</h4> " + 
+                        "<ul>"
+                        
+                    values = facets[facet]
+                        
+                    for value of values
+                        facets_html += "<li><a href='#' data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
+                        
+                    facets_html += "</ul>"
+                        
+                facets_container.html(facets_html)
+                #/Render the facets
+                
+                $("#facets-container ul li a").on 'click', ->
+                    facets_container.empty()
+                    places_container.empty()
+                    
+                    console.log this.getAttribute('data-value')
+                    search(searchbar.val(), this.getAttribute('data-facet') + ":" + this.getAttribute('data-value'))
             )
     
-    search('')
+    search('', '')
     
     searchbar.keyup ->
         search(searchbar.val())
