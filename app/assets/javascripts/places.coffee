@@ -19,6 +19,45 @@ $(document).ready ->
     places = ""
     facets = ""
     
+    renderPlaces = (places) ->
+        places_container.empty()
+        
+        places_html = "" 
+        
+        for place in places 
+            places_html += 
+                "<a href='/places/" + place.id + "'><h3>" + place.address + "</a>" +
+                "<p>" + place.description + "</p>" + 
+                "<p>Price: $" + place.price + "</p>"
+                
+        places_container.html(places_html)
+        
+    renderFacets = (facets) ->
+        facets_container.empty()
+        
+        facets_html = ""
+        
+        for facet of facets
+            facets_html += 
+                "<h4>" + facet + ":</h4> " + 
+                "<ul>"
+                
+            values = facets[facet]
+                
+            for value of values
+                facets_html += "<li><a href='#' data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
+                
+            facets_html += "</ul>"
+                
+        facets_container.html(facets_html)
+        
+        $("#facets-container ul li a").on 'click', ->
+            facets_container.empty()
+            places_container.empty()
+            
+            console.log this.getAttribute('data-value')
+            search(searchbar.val(), this.getAttribute('data-facet') + ":" + this.getAttribute('data-value'))
+    
     search = (query, facetfilters) ->
         index.search(query, 
         {
@@ -29,43 +68,8 @@ $(document).ready ->
             if err 
                 console.error(err)
             else
-                places = content.hits
-                facets = content.facets
-                places_html = ""
-                facets_html = ""
-                
-                #Render the places
-                for place in places 
-                    places_html += 
-                        "<a href='/places/" + place.id + "'><h3>" + place.address + "</a>" +
-                        "<p>" + place.description + "</p>" + 
-                        "<p>Price: $" + place.price + "</p>"
-                
-                places_container.html(places_html)
-                #/Render the places
-                
-                #Render the facets
-                for facet of facets
-                    facets_html += 
-                        "<h4>" + facet + ":</h4> " + 
-                        "<ul>"
-                        
-                    values = facets[facet]
-                        
-                    for value of values
-                        facets_html += "<li><a href='#' data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
-                        
-                    facets_html += "</ul>"
-                        
-                facets_container.html(facets_html)
-                #/Render the facets
-                
-                $("#facets-container ul li a").on 'click', ->
-                    facets_container.empty()
-                    places_container.empty()
-                    
-                    console.log this.getAttribute('data-value')
-                    search(searchbar.val(), this.getAttribute('data-facet') + ":" + this.getAttribute('data-value'))
+                renderPlaces(content.hits)
+                renderFacets(content.facets)
             )
     
     search('', '')
