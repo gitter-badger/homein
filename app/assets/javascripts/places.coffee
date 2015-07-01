@@ -30,6 +30,13 @@ $(document).ready ->
                 "<p>Price: $" + place.price + "</p>"
                 
         places_container.html(places_html)
+    
+    prepareFacets = (facets) ->
+        queryFacets = ""
+        for facet of facets 
+            queryFacets += facet + ":" + facets[facet] + ", "
+            
+        queryFacets
         
     renderFacets = (facets) ->
         facets_container.empty()
@@ -60,19 +67,13 @@ $(document).ready ->
             currentfacet.push this.getAttribute('data-value')
             
             if currentfacets[currentfacet[0]]
-                console.log currentfacets
                 delete currentfacets[currentfacet[0]]
             else 
                 currentfacets[currentfacet[0]] = currentfacet[1]
-                console.log currentfacets
             
             facet = this.getAttribute('data-facet') + ":" + this.getAttribute('data-value')
             
-            queryFacets = ""
-            for facet of currentfacets
-                queryFacets += facet + ":" + currentfacets[facet] + ", "
-            
-            search(searchbar.val(), queryFacets)
+            search(searchbar.val(), prepareFacets(currentfacets))
     
     setURLParams = (query, facet) ->
         urlParams = "#"
@@ -96,5 +97,5 @@ $(document).ready ->
     search('', '')
     
     searchbar.keyup ->
-        search(searchbar.val())
+        search(searchbar.val(), prepareFacets(currentfacets))
         setURLParams(searchbar.val())
