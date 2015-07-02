@@ -17,6 +17,7 @@ $(document).ready ->
     facets_container = $("#facets-container")
     
     currentfacets = {}
+    currentquery = ""
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -31,12 +32,43 @@ $(document).ready ->
                 
         places_container.html(places_html)
     
-    prepareFacets = (facets) ->
-        queryFacets = ""
-        for facet of facets 
-            queryFacets += facet + ":" + facets[facet] + ", "
+    prepareFacets = (facets, url) ->
+        if url 
+            queryFacets = ""
+            for facet of facets 
+                queryFacets += "&" + facet + "=" + facets[facet]
+        else 
+            queryFacets = ""
+            for facet of facets 
+                queryFacets += facet + ":" + facets[facet] + ", "
             
         queryFacets
+        
+    setURLParams = (query, facets) ->
+        urlParams = "#"
+        urlParams += "q=" + encodeURIComponent(searchbar.val())
+        urlParams += prepareFacets(facets, true)
+        
+        location.replace urlParams
+        
+    decodeURLParams = () ->
+        urlParams = decodeURIComponent(location.hash)
+        
+        query = urlParams.split("&")[0].split("=")[1]
+        
+        qfacets = urlParams.split("&").splice(1)
+        
+        facets = {}
+        
+        for facet in qfacets 
+            facets[facet.split("=")[0]] = facet.split("=")[1]
+        
+        currentfacets = facets 
+        
+        currentquery = query 
+        searchbar.val(query)
+        
+        console.log currentquery, currentfacets
         
     renderFacets = (facets) ->
         facets_container.empty()
@@ -51,7 +83,7 @@ $(document).ready ->
             values = facets[facet]
                 
             for value of values
-                facets_html += "<li><a href='#' data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
+                facets_html += "<li><a data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
                 
             facets_html += "</ul>"
                 
@@ -71,14 +103,9 @@ $(document).ready ->
             else 
                 currentfacets[currentfacet[0]] = currentfacet[1]
             
-            facet = this.getAttribute('data-facet') + ":" + this.getAttribute('data-value')
+            setURLParams(searchbar.val(), currentfacets)
             
             search(searchbar.val(), prepareFacets(currentfacets))
-    
-    setURLParams = (query, facet) ->
-        urlParams = "#"
-        urlParams += "q=" + encodeURIComponent(query)
-        console.log urlParams
     
     search = (query, facetfilters) ->
         index.search(query, 
@@ -94,8 +121,10 @@ $(document).ready ->
                 renderFacets(content.facets)
             )
     
-    search('', '')
+    decodeURLParams()
+    
+    search(currentquery, prepareFacets(currentfacets))
     
     searchbar.keyup ->
+        setURLParams(searchbar.val(), currentfacets)
         search(searchbar.val(), prepareFacets(currentfacets))
-        setURLParams(searchbar.val())
