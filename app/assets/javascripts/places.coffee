@@ -18,6 +18,7 @@ $(document).ready ->
     
     currentfacets = {}
     currentquery = ""
+    currentcontent = ""
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -77,17 +78,21 @@ $(document).ready ->
         
         for facet of facets
             facets_html += 
-                "<h4>" + facet + ":</h4> " + 
-                "<ul>"
-                
-            values = facets[facet]
-                
-            for value of values
-                facets_html += "<li><a data-value='" + value + "' data-facet='" + facet + "'>" + value + "</a></li>"
-                
-            facets_html += "</ul>"
+                "<div data-facet='" + facet + "'
+                data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
+                data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
+                ></div>"
                 
         facets_container.html(facets_html)
+        
+        $("#facets-container div").slider 
+            range: true
+            create: () ->
+                $(this).slider( "option", "min", $(this).data('min') )
+                $(this).slider( "option", "max", $(this).data('max') )
+                $(this).slider( "option", "value", $(this).data('min') )
+            slide: (event, ui) ->
+                console.log ui.values[0]
         
         $("#facets-container ul li a").on 'click', ->
             facets_container.empty()
@@ -117,6 +122,8 @@ $(document).ready ->
             if err 
                 console.error(err)
             else
+                currentcontent = content 
+                
                 renderPlaces(content.hits)
                 renderFacets(content.facets)
             )
