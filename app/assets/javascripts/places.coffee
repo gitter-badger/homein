@@ -2,6 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+# Add a method to the string prototype to capitalize the first letter of a String
+# SO surprised javascript doesn't already have this 
+String.prototype.capitalizeFirstLetter = () -> 
+    this.charAt(0).toUpperCase() + this.slice(1)
+
 $(document).ready ->
     ApplicationID = '3J0AVN6KSY'
     
@@ -69,19 +74,26 @@ $(document).ready ->
         currentquery = query 
         searchbar.val(query)
         
-        console.log currentquery, currentfacets
-        
     renderFacets = (facets) ->
         facets_container.empty()
         
         facets_html = ""
         
         for facet of facets
-            facets_html += 
-                "<div data-facet='" + facet + "'
-                data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
-                data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
-                ></div>"
+            if facet == 'price'
+                facets_html += 
+                    "<p id='" + facet + "'>" + facet + ": $" + currentcontent['facets_stats'][facet]['min'] + " - $" + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    <div data-facet='" + facet + "'
+                    data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
+                    data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
+                    ></div>"
+            else
+                facets_html += 
+                    "<p id='" + facet + "'>" + facet + ": " + currentcontent['facets_stats'][facet]['min'] + " - " + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    <div data-facet='" + facet + "'
+                    data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
+                    data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
+                    ></div>"
                 
         facets_container.html(facets_html)
         
@@ -90,9 +102,13 @@ $(document).ready ->
             create: () ->
                 $(this).slider( "option", "min", $(this).data('min') )
                 $(this).slider( "option", "max", $(this).data('max') )
-                $(this).slider( "option", "value", $(this).data('min') )
-            slide: (event, ui) ->
-                console.log ui.values[0]
+                $(this).slider( "option", "values", [$(this).data('min'), $(this).data('max')] )
+            stop: (event, ui) ->
+                label = $(ui.handle.parentNode.previousElementSibling)
+                if label[0].id == 'price'
+                    label.html(label[0].id.capitalizeFirstLetter() + ": $" + ui.values[0] + " - $" + ui.values[1])
+                else 
+                    label.html(label[0].id.capitalizeFirstLetter() + ": " + ui.values[0] + " - " + ui.values[1])
         
         $("#facets-container ul li a").on 'click', ->
             facets_container.empty()
