@@ -42,12 +42,13 @@ $(document).ready ->
         if url 
             queryFacets = ""
             for facet of facets 
-                queryFacets += "&" + facet + "=" + facets[facet]
+                queryFacets += "&" + facet + "=" + facets[facet][0] + "-" + facets[facet][1]
         else 
-            queryFacets = ""
+            queryFacets = []
             for facet of facets 
-                queryFacets += facet + ":" + facets[facet] + ", "
-            
+                queryFacets.push facet + ">=" + facets[facet][0]
+                queryFacets.push facet + "<=" + facets[facet][1]
+        
         queryFacets
         
     setURLParams = (query, facets) ->
@@ -60,14 +61,17 @@ $(document).ready ->
     decodeURLParams = () ->
         urlParams = decodeURIComponent(location.hash)
         
-        query = urlParams.split("&")[0].split("=")[1]
+        if urlParams.split("&")[0].split("=")[1]
+            query = urlParams.split("&")[0].split("=")[1]
+        else 
+            query = ""
         
         qfacets = urlParams.split("&").splice(1)
         
         facets = {}
         
         for facet in qfacets 
-            facets[facet.split("=")[0]] = facet.split("=")[1]
+            facets[facet.split("=")[0]] = [facet.split("=")[1].split("-")[0], facet.split("=")[1].split("-")[1]]
         
         currentfacets = facets 
         
@@ -82,14 +86,14 @@ $(document).ready ->
         for facet of facets
             if facet == 'price'
                 facets_html += 
-                    "<p id='" + facet + "'>" + facet + ": $" + currentcontent['facets_stats'][facet]['min'] + " - $" + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $" + currentcontent['facets_stats'][facet]['min'] + " - $" + currentcontent['facets_stats'][facet]['max'] + "</p>
                     <div data-facet='" + facet + "'
                     data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
                     data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
                     ></div>"
             else
                 facets_html += 
-                    "<p id='" + facet + "'>" + facet + ": " + currentcontent['facets_stats'][facet]['min'] + " - " + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": " + currentcontent['facets_stats'][facet]['min'] + " - " + currentcontent['facets_stats'][facet]['max'] + "</p>
                     <div data-facet='" + facet + "'
                     data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
                     data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
@@ -109,30 +113,17 @@ $(document).ready ->
                     label.html(label[0].id.capitalizeFirstLetter() + ": $" + ui.values[0] + " - $" + ui.values[1])
                 else 
                     label.html(label[0].id.capitalizeFirstLetter() + ": " + ui.values[0] + " - " + ui.values[1])
-        
-        $("#facets-container ul li a").on 'click', ->
-            facets_container.empty()
-            places_container.empty()
-            
-            currentfacet = []
-            
-            currentfacet.push this.getAttribute('data-facet')
-            currentfacet.push this.getAttribute('data-value')
-            
-            if currentfacets[currentfacet[0]]
-                delete currentfacets[currentfacet[0]]
-            else 
-                currentfacets[currentfacet[0]] = currentfacet[1]
-            
-            setURLParams(searchbar.val(), currentfacets)
-            
-            search(searchbar.val(), prepareFacets(currentfacets))
+                    
+                currentfacets[label[0].id] = [ui.values[0], ui.values[1]]
+                
+                setURLParams(currentquery, currentfacets)
+                search(currentquery, prepareFacets(currentfacets))
     
     search = (query, facetfilters) ->
         index.search(query, 
         {
             facets: "*"
-            facetFilters: facetfilters 
+            numericFilters: facetfilters 
         },
         (err, content) ->
             if err 
