@@ -123,6 +123,12 @@ $(document).ready ->
                 
                 setURLParams(window.currentquery, window.currentfacets)
                 search(window.currentquery, prepareFacets(window.currentfacets))
+            slide: (event, ui) ->
+                label = $(ui.handle.parentNode.previousElementSibling)
+                if label[0].id == 'price'
+                    label.html(label[0].id.capitalizeFirstLetter() + ": $" + ui.values[0] + " - $" + ui.values[1])
+                else 
+                    label.html(label[0].id.capitalizeFirstLetter() + ": " + ui.values[0] + " - " + ui.values[1])
     
     search = (query, facetfilters) ->
         index.search(query, 
