@@ -78,7 +78,7 @@ $(document).ready ->
         facets = {}
         
         for facet in qfacets 
-            facets[facet.split("=")[0]] = [facet.split("=")[1].split("-")[0], facet.split("=")[1].split("-")[1]]
+            facets[facet.split("=")[0]] = [parseInt(facet.split("=")[1].split("-")[0]), parseInt(facet.split("=")[1].split("-")[1])]
         
         window.currentfacets = facets 
         
