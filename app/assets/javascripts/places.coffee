@@ -68,6 +68,13 @@ $(document).ready ->
         
         qfacets = urlParams.split("&").splice(1)
         
+        if qfacets[0] == undefined
+            facets = []
+            for facet of maxmins
+                facets.push facet + "=" + maxmins[facet][0] + "-" + maxmins[facet][1]
+                
+            qfacets = facets
+        
         facets = {}
         
         for facet in qfacets 
@@ -100,13 +107,12 @@ $(document).ready ->
                     ></div>"
                 
         facets_container.html(facets_html)
-        
         $("#facets-container div").slider 
             range: true
             create: () ->
-                $(this).slider( "option", "min", $(this).data('min') )
-                $(this).slider( "option", "max", $(this).data('max') )
-                $(this).slider( "option", "values", [$(this).data('min'), $(this).data('max')] )
+                $(this).slider( "option", "min", maxmins[$(this).data("facet")][0] )
+                $(this).slider( "option", "max", maxmins[$(this).data("facet")][1] )
+                $(this).slider( "option", "values", [ currentfacets[$(this).data("facet")][0], currentfacets[$(this).data("facet")][1] ] )
             stop: (event, ui) ->
                 label = $(ui.handle.parentNode.previousElementSibling)
                 if label[0].id == 'price'
