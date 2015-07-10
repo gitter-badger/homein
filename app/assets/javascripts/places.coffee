@@ -21,9 +21,9 @@ $(document).ready ->
     searchbar = $("#searchbar")
     facets_container = $("#facets-container")
     
-    currentfacets = {}
-    currentquery = ""
-    currentcontent = ""
+    window.currentfacets = {}
+    window.currentquery = ""
+    window.currentcontent = ""
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -80,30 +80,29 @@ $(document).ready ->
         for facet in qfacets 
             facets[facet.split("=")[0]] = [facet.split("=")[1].split("-")[0], facet.split("=")[1].split("-")[1]]
         
-        currentfacets = facets 
+        window.currentfacets = facets 
         
-        currentquery = query 
+        window.currentquery = query 
         searchbar.val(query)
         
     renderFacets = (facets) ->
-        facets_container.empty()
         
         facets_html = ""
         
         for facet of facets
             if facet == 'price'
                 facets_html += 
-                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $" + currentcontent['facets_stats'][facet]['min'] + " - $" + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $" + window.currentfacets[facet][0] + " - $" + window.currentfacets[facet][1] + "</p>
                     <div data-facet='" + facet + "'
-                    data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
-                    data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
+                    data-max='" + window.currentfacets[facet][1] + "'
+                    data-min='" + window.currentfacets[facet][0] + "'
                     ></div>"
             else
                 facets_html += 
-                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": " + currentcontent['facets_stats'][facet]['min'] + " - " + currentcontent['facets_stats'][facet]['max'] + "</p>
+                    "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": " + window.currentfacets[facet][0] + " - " + window.currentfacets[facet][1] + "</p>
                     <div data-facet='" + facet + "'
-                    data-max='" + currentcontent['facets_stats'][facet]['max'] + "'
-                    data-min='" + currentcontent['facets_stats'][facet]['min'] + "'
+                    data-max='" + window.currentfacets[facet][1] + "'
+                    data-min='" + window.currentfacets[facet][0] + "'
                     ></div>"
                 
         facets_container.html(facets_html)
@@ -112,7 +111,7 @@ $(document).ready ->
             create: () ->
                 $(this).slider( "option", "min", maxmins[$(this).data("facet")][0] )
                 $(this).slider( "option", "max", maxmins[$(this).data("facet")][1] )
-                $(this).slider( "option", "values", [ currentfacets[$(this).data("facet")][0], currentfacets[$(this).data("facet")][1] ] )
+                $(this).slider( "option", "values", [ window.currentfacets[$(this).data("facet")][0], window.currentfacets[$(this).data("facet")][1] ] )
             stop: (event, ui) ->
                 label = $(ui.handle.parentNode.previousElementSibling)
                 if label[0].id == 'price'
@@ -120,10 +119,10 @@ $(document).ready ->
                 else 
                     label.html(label[0].id.capitalizeFirstLetter() + ": " + ui.values[0] + " - " + ui.values[1])
                     
-                currentfacets[label[0].id] = [ui.values[0], ui.values[1]]
+                window.currentfacets[label[0].id] = [ui.values[0], ui.values[1]]
                 
-                setURLParams(currentquery, currentfacets)
-                search(currentquery, prepareFacets(currentfacets))
+                setURLParams(window.currentquery, window.currentfacets)
+                search(window.currentquery, prepareFacets(window.currentfacets))
     
     search = (query, facetfilters) ->
         index.search(query, 
@@ -135,16 +134,17 @@ $(document).ready ->
             if err 
                 console.error(err)
             else
-                currentcontent = content 
+                window.currentcontent = content 
                 
                 renderPlaces(content.hits)
-                renderFacets(content.facets)
+                renderFacets(window.currentfacets)
             )
     
     decodeURLParams()
     
-    search(currentquery, prepareFacets(currentfacets))
+    search(window.currentquery, prepareFacets(window.currentfacets))
     
     searchbar.keyup ->
-        setURLParams(searchbar.val(), currentfacets)
-        search(searchbar.val(), prepareFacets(currentfacets))
+        window.currentquery = searchbar.val()
+        setURLParams(window.currentquery, window.currentfacets)
+        search(window.currentquery, prepareFacets(window.currentfacets))
