@@ -7,8 +7,6 @@ class PlacesController < ApplicationController
   # GET /places.json
   def index
     @places = Place.all
-    
-    @maxmins = Place.maxmins
   end
 
   # GET /places/1

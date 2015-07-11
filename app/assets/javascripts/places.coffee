@@ -24,6 +24,20 @@ $(document).ready ->
     window.currentfacets = {}
     window.currentquery = ""
     window.currentcontent = ""
+    window.maxmins = {}
+    
+    setMaxMins = () ->
+        index.search("", 
+        {
+            facets: "*"
+        },
+        (err, content) ->
+            if err 
+                console.error(err)
+            else
+                for facet of content.facets_stats
+                    window.maxmins[facet] = [ content.facets_stats[facet].min, content.facets_stats[facet].max ]
+            )
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -70,8 +84,8 @@ $(document).ready ->
         
         if qfacets[0] == undefined
             facets = []
-            for facet of maxmins
-                facets.push facet + "=" + maxmins[facet][0] + "-" + maxmins[facet][1]
+            for facet of window.maxmins
+                facets.push facet + "=" + window.maxmins[facet][0] + "-" + window.maxmins[facet][1]
                 
             qfacets = facets
         
@@ -109,8 +123,8 @@ $(document).ready ->
         $("#facets-container div").slider 
             range: true
             create: () ->
-                $(this).slider( "option", "min", maxmins[$(this).data("facet")][0] )
-                $(this).slider( "option", "max", maxmins[$(this).data("facet")][1] )
+                $(this).slider( "option", "min", window.maxmins[$(this).data("facet")][0] )
+                $(this).slider( "option", "max", window.maxmins[$(this).data("facet")][1] )
                 $(this).slider( "option", "values", [ window.currentfacets[$(this).data("facet")][0], window.currentfacets[$(this).data("facet")][1] ] )
             stop: (event, ui) ->
                 label = $(ui.handle.parentNode.previousElementSibling)
@@ -145,6 +159,8 @@ $(document).ready ->
                 renderPlaces(content.hits)
                 renderFacets(window.currentfacets)
             )
+            
+    setMaxMins()
     
     decodeURLParams()
     

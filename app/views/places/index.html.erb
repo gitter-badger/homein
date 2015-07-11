@@ -18,7 +18,3 @@
 <% if user_signed_in? %>
   <%= link_to 'New Place', new_place_path %>
 <% end %>
-
-<%= javascript_tag do %>
-    window.maxmins = <%=raw @maxmins.to_json %>
-<% end %>
