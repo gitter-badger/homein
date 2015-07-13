@@ -7,6 +7,8 @@
   var geocoder;
   var map;
   var marker;
+  var infowindow;
+  var infoWindowContent;
 
   function initialize() {
     geocoder = new google.maps.Geocoder();
@@ -27,6 +29,63 @@
       draggable: true,
       animation: google.maps.Animation.DROP 
     });
+    
+    infoWindowContent = '<%= form_for(@place) do |f| %>' +
+                            <% if @place.errors.any? %>
+                                '<h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>' + 
+                                '<ul>' + 
+                                    <% @place.errors.full_messages.each do |message| %>
+                                        '<li><%= message %></li>' + 
+                                    <% end %>
+                                '</ul>' + 
+                            <% end %>
+                            '<div class="field">' + 
+                                '<%= f.label :description %><br>' + 
+                                '<%= f.text_field :description %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :address %><br>' + 
+                                '<%= f.text_field :address %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :latitude %><br>' + 
+                                '<%= f.text_field :latitude %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :longitude %><br>' + 
+                                '<%= f.text_field :longitude %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :rooms %><br>' + 
+                                '<%= f.number_field :rooms %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :bathrooms %><br>' + 
+                                '<%= f.number_field :bathrooms %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :available %><br>' + 
+                                '<%= f.check_box :available %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :price %><br>' + 
+                                '<%= f.number_field :price %>' + 
+                            '</div>' + 
+                            '<div class="field">' + 
+                                '<%= f.label :contact %><br>' + 
+                                '<%= f.text_field :contact %>' + 
+                            '</div>' + 
+                            '<div class="actions">' + 
+                                '<%= f.submit %>' + 
+                            '</div>' + 
+                        "<% end %>" + 
+                        '<%= link_to "Show", @place %> | ' + 
+                        '<%= link_to "Back", places_path %> | ' + 
+                        '<%= link_to "Delete", @place, method: :delete, data: { confirm: "Are you sure?" } %>';
+    
+    infowindow = new google.maps.InfoWindow({
+        content: infoWindowContent
+    });
 
     google.maps.event.addListener(marker, 'dragend', setLatLng);
 
@@ -38,6 +97,8 @@
 
       reverseGeocode();
     };
+    
+    infowindow.open(map, marker);
   };
 
   function codeAddress() {

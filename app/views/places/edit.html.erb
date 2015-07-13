@@ -2,12 +2,4 @@
   data-no-turbolink="true"
 <% end %>
 
-<h1>Editing Place</h1>
-
 <%= render 'editable_map' %>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @place %> |
-<%= link_to 'Back', places_path %> | 
-<%= link_to 'Delete', @place, method: :delete, data: { confirm: 'Are you sure?' } %>
