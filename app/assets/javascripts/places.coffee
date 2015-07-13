@@ -26,7 +26,7 @@ $(document).ready ->
     window.currentcontent = ""
     window.maxmins = {}
     
-    setMaxMins = () ->
+    window.setMaxMins = () ->
         index.search("", 
         {
             facets: "*"
@@ -35,8 +35,16 @@ $(document).ready ->
             if err 
                 console.error(err)
             else
+                maxmins = {} 
+                
                 for facet of content.facets_stats
-                    window.maxmins[facet] = [ content.facets_stats[facet].min, content.facets_stats[facet].max ]
+                    maxmins[facet] = [ content.facets_stats[facet].min, content.facets_stats[facet].max ]
+                    
+                window.maxmins = maxmins
+    
+                decodeURLParams()
+                
+                search(window.currentquery, prepareFacets(window.currentfacets))
             )
     
     renderPlaces = (places) ->
@@ -80,27 +88,25 @@ $(document).ready ->
         else 
             query = ""
         
-        qfacets = urlParams.split("&").splice(1)
-        
-        if qfacets[0] == undefined
-            facets = []
-            for facet of window.maxmins
-                facets.push facet + "=" + window.maxmins[facet][0] + "-" + window.maxmins[facet][1]
+        if urlParams.split("&").splice(1)[0]
+            facets = {} 
+            for facet of window.maxmins 
+                facets[facet] = [ window.maxmins[facet][0], window.maxmins[facet][1] ]
                 
-            qfacets = facets
+            for facet in urlParams.split("&").splice(1)
+                facets[facet.split("=")[0]] = [ facet.split("=")[1].split("-")[0], facet.split("=")[1].split("-")[1] ] 
+        else 
+            facets = {} 
+            
+            for facet of window.maxmins 
+                facets[facet] = [ window.maxmins[facet][0], window.maxmins[facet][1] ]
         
-        facets = {}
-        
-        for facet in qfacets 
-            facets[facet.split("=")[0]] = [parseInt(facet.split("=")[1].split("-")[0]), parseInt(facet.split("=")[1].split("-")[1])]
-        
-        window.currentfacets = facets 
+        window.currentfacets = facets
         
         window.currentquery = query 
         searchbar.val(query)
         
     renderFacets = (facets) ->
-        
         facets_html = ""
         
         for facet of facets
@@ -120,6 +126,7 @@ $(document).ready ->
                     ></div>"
                 
         facets_container.html(facets_html)
+        
         $("#facets-container div").slider 
             range: true
             create: () ->
@@ -160,11 +167,7 @@ $(document).ready ->
                 renderFacets(window.currentfacets)
             )
             
-    setMaxMins()
-    
-    decodeURLParams()
-    
-    search(window.currentquery, prepareFacets(window.currentfacets))
+    window.setMaxMins()
     
     searchbar.keyup ->
         window.currentquery = searchbar.val()
