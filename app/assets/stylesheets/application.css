@@ -19,6 +19,8 @@
     position: absolute;
     width: 100%;
     text-align: center;
+    color: white;
+    z-index: 99;
 }
 
 #alert {
