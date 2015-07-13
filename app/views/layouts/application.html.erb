@@ -13,6 +13,8 @@
 <p id="notice"><%= notice %></p>
 <p id="alert"><%= alert %></p>
 
+<%= yield %>
+
 <% if user_signed_in? %>
 	<li>
 		Logged in as: <%= link_to current_user.email, page_path(id: "currentuser") %>
@@ -28,8 +30,6 @@
 	    <%= link_to 'Register', new_user_registration_path %> 
 	</li>
 <% end %>
-
-<%= yield %>
 
 </body>
 </html>

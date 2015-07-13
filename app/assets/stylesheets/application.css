@@ -14,3 +14,17 @@
  *= require_self
  *= require jquery-ui
  */
+#alert, #notice {
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+#alert {
+    background-color: red;
+}
+
+#notice {
+    background-color: green;
+}
