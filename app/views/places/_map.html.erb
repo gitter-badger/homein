@@ -21,7 +21,7 @@
     };
     
     infoWindowContent = "<h2><%= @place.address %></h2><br />" + 
-    "<p><%= @place.description %></p><br />" +
+    "<p><%= @place.description.gsub(/\r\n/, '<br />').html_safe.gsub(/\"/, '&quot;').html_safe %></p><br />" +
     "<hr />" + 
     "<strong>Rooms:</strong> <%= @place.rooms %>, <strong>Bathrooms:</strong> <%= @place.bathrooms %><br />" + 
     "<strong>Price:</strong> <%= number_to_currency(@place.price) %> " + 

@@ -41,16 +41,20 @@
                             <% end %>
                             '<div class="field">' + 
                                 '<%= f.label :description %><br>' + 
-                                '<%= f.text_field :description %>' + 
+                                '<textarea name="place[description]" id="place_description">' + 
+                                    '<%=  escape_javascript(@place.description) %>' + 
+                                '</textarea>' + 
                             '</div>' + 
                             '<div class="field">' + 
                                 '<%= f.label :address %><br>' + 
-                                '<%= f.text_field :address %>' + 
+                                '<textarea name="place[address]" id="place_address">' + 
+                                    '<%= @place.address %>' + 
+                                '</textarea>' + 
                             '</div>' + 
                             '<div class="field">' + 
                                 '<%= f.label :latitude %><br>' + 
                                 '<%= f.text_field :latitude %>' + 
-                            '</div>' + 
+                            '</div>' +  
                             '<div class="field">' + 
                                 '<%= f.label :longitude %><br>' + 
                                 '<%= f.text_field :longitude %>' + 
