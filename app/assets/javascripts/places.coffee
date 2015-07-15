@@ -27,25 +27,26 @@ $(document).ready ->
     window.maxmins = {}
     
     window.setMaxMins = () ->
-        index.search("", 
-        {
-            facets: "*"
-        },
-        (err, content) ->
-            if err 
-                console.error(err)
-            else
-                maxmins = {} 
-                
-                for facet of content.facets_stats
-                    maxmins[facet] = [ content.facets_stats[facet].min, content.facets_stats[facet].max ]
+        if location.pathname == "/"
+            index.search("", 
+            {
+                facets: "*"
+            },
+            (err, content) ->
+                if err 
+                    console.error(err)
+                else
+                    maxmins = {} 
                     
-                window.maxmins = maxmins
-    
-                decodeURLParams()
-                
-                search(window.currentquery, prepareFacets(window.currentfacets))
-            )
+                    for facet of content.facets_stats
+                        maxmins[facet] = [ content.facets_stats[facet].min, content.facets_stats[facet].max ]
+                        
+                    window.maxmins = maxmins
+        
+                    decodeURLParams()
+                    
+                    search(window.currentquery, prepareFacets(window.currentfacets))
+                )
     
     renderPlaces = (places) ->
         places_container.empty()
@@ -198,7 +199,7 @@ $(document).ready ->
             markers[place]["id"] = place 
                 
             # Set the info window content 
-            infoWindowsContent[place] = "<h2>" + places[place].address + "</h2><br />" + 
+            infoWindowsContent[place] = "<a href='places/" + places[place].id + "'><h2>" + places[place].address + "</h2></a><br />" + 
                 "<p>" + places[place].description + "</p><br />" +
                 "<hr />" + 
                 "<strong>Rooms:</strong> " + places[place].rooms + " | <strong>Bathrooms:</strong>" + places[place].bathrooms + "<br />" + 
