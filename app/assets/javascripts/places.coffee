@@ -165,8 +165,55 @@ $(document).ready ->
                 
                 renderPlaces(content.hits)
                 renderFacets(window.currentfacets)
+                
+                initializeMap()
             )
+    
+    initializeMap = () ->
+        center = new google.maps.LatLng(6.802066748199674, -58.16407062167349) # Broad and lying street, GT 
+        
+        infoWindowsContent = []
+        infoWindowsOptions = []
+        infoWindows = []
+        
+        mapOptions = 
+            zoom: 2  # I want to be able to see everything. I'll figure out how to auto zoom to see all markers later 
+            center: center
+        
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); 
+        
+        places = window.currentcontent.hits 
+        markers = []
+        
+        for place of places 
+            thislatlng = new google.maps.LatLng(places[place].latitude, places[place].longitude) # I'll need this later 
             
+            # Create the markers 
+            markers[place] = new google.maps.Marker
+                position: thislatlng
+                map: map
+                title: 'Hello World!'
+                draggable: false
+                
+            markers[place]["id"] = place 
+                
+            # Set the info window content 
+            infoWindowsContent[place] = "<h2>" + places[place].address + "</h2><br />" + 
+                "<p>" + places[place].description + "</p><br />" +
+                "<hr />" + 
+                "<strong>Rooms:</strong> " + places[place].rooms + " | <strong>Bathrooms:</strong>" + places[place].bathrooms + "<br />" + 
+                "<strong>Price:</strong> " + places[place].price + "<br />" 
+                "<strong>Contact:</strong> " + places[place].user_id + "<br />"
+            
+            # Create the info windows 
+            infoWindow = new google.maps.InfoWindow
+                content: infoWindowsContent[place]
+                position: markers[place].position
+            
+            google.maps.event.addListener markers[place], 'click', ->
+                infoWindow.setContent(infoWindowsContent[this.id])
+                infoWindow.open map, this 
+    
     window.setMaxMins()
     
     searchbar.keyup ->

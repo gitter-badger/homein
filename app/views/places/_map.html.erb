@@ -29,7 +29,7 @@
     "<% if user_signed_in? %>" + 
       "<% if @place.user == current_user %>" + 
         '<%= link_to "Edit", edit_place_path(@place) %> | ' + 
-        '<%= link_to "Delete", @place, method: :delete, data: { confirm: 'Are you sure?' } %>' + 
+        '<%= link_to "Delete", @place, method: :delete, data: { confirm: "Are you sure?" } %>' + 
       "<% end %>" + 
     "<% end %>";
     

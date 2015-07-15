@@ -2,13 +2,15 @@
   data-no-turbolink="true"
 <% end %>
 
+<!-- API request -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['google_maps_api_key'] %>" %>>
+</script>
+
 <%= form_tag search_places_path do %>
     <input id="searchbar" name="query" placeholder="Search places" type="text">
 <% end %>
 
-<h1>Listing Places</h1>
-
-<div id="places-container">
+<div id="map-canvas">
 </div>
 
 <div id="facets-container"></div>
