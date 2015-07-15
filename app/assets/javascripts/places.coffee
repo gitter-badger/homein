@@ -192,7 +192,7 @@ $(document).ready ->
             markers[place] = new google.maps.Marker
                 position: thislatlng
                 map: map
-                title: 'Hello World!'
+                title: places[place].address
                 draggable: false
                 
             markers[place]["id"] = place 
@@ -213,6 +213,8 @@ $(document).ready ->
             google.maps.event.addListener markers[place], 'click', ->
                 infoWindow.setContent(infoWindowsContent[this.id])
                 infoWindow.open map, this 
+                
+        markerClusterer = new MarkerClusterer(map, markers)
     
     window.setMaxMins()
     
