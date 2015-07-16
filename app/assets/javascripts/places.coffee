@@ -14,7 +14,7 @@ $(document).ready ->
     
     client = algoliasearch(ApplicationID, SearchOnlyApiKey)
     
-    index = client.initIndex('Place')
+    index = client.initIndex('homein_places_' + window.environment)
     
     # DOM initialization
     places_container = $("#places-container")

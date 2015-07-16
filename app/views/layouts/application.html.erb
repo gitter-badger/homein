@@ -23,6 +23,10 @@
 <div id="map-canvas">
 </div>
 
+<%= javascript_tag do %>
+    window.environment = "<%= Rails.env %>";
+<% end %> 
+
 <% if user_signed_in? %>
     <ul id="navigation_links">
     	<li>
