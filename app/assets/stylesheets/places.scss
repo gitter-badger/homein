@@ -27,7 +27,25 @@ html, body, #map-canvas {
         padding: 15px;
     }
     
-    form   
+    #navigation_links {
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+        margin: 0 auto;
+        list-style-type: none;
+        text-align: center;
+        padding: 0;
+    }
+    
+    form 
+        #searchbar {
+            position: absolute;
+            z-index: 99;
+            width: 200px;
+            left: 45%;
+            top: 5px;
+        }
+    
         #latitude_field, #longitude_field, #contact_field, #available_field {
             display: none;
         }

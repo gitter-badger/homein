@@ -16,21 +16,30 @@
 <%= yield %>
 
 <% if user_signed_in? %>
-    <ul class="authorization_links">
+    <ul id="navigation_links">
     	<li>
-    		Logged in as: <%= link_to current_user.email, page_path(id: "currentuser"), :id => "logged_in" %>
+    		<%= link_to current_user.email, page_path(id: "currentuser"), :id => "logged_in" %>
     	</li>
     	<li>
     		<%= link_to 'Logout', destroy_user_session_path, :method => :delete, :id => "logout" %>
     	</li>
+    	<li>
+    	    <%= link_to 'Home', root_path %>
+    	</li>
+    	<li>
+    	    <%= link_to 'New Place', new_place_path %>
+    	</li>
 	</ul>
 <% else %>
-    <ul class="authorization_links">
+    <ul id="navigation_links">
     	<li>
     		<%= link_to 'Login', new_user_session_path, :id => "login" %>
     	</li>
     	<li>
     	    <%= link_to 'Register', new_user_registration_path, :id => "register" %> 
+    	</li>
+    	<li>
+    	    <%= link_to 'Home', root_path %>
     	</li>
 	</ul>
 <% end %>
