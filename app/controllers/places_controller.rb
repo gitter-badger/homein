@@ -29,6 +29,7 @@ class PlacesController < ApplicationController
     @place = Place.new(place_params)
 
     @place.user = current_user 
+    @place.contact = @place.user.email 
 
     respond_to do |format|
       if @place.save
