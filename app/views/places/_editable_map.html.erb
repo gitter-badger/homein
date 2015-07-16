@@ -1,7 +1,3 @@
-<!-- API request -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['google_maps_api_key'] %>" %>>
-</script>
-
 <!-- Javascript to build the map -->
 <script type="text/javascript">
   var geocoder;
@@ -93,8 +89,14 @@
 
     function setLatLng() {
       var position = marker.getPosition()
-      document.forms['edit_place_<%= params["id"] %>'].place_latitude.value = position.A
-      document.forms['edit_place_<%= params["id"] %>'].place_longitude.value = position.F 
+      
+      if(location.pathname.split("/")[2] === "new"){
+          document.forms['new_place'].place_latitude.value = position.A
+          document.forms['new_place'].place_longitude.value = position.F 
+      } else {
+          document.forms['edit_place_<%= params["id"] %>'].place_latitude.value = position.A
+          document.forms['edit_place_<%= params["id"] %>'].place_longitude.value = position.F 
+      }
       map.panTo(position);
 
       reverseGeocode();
@@ -117,17 +119,26 @@
   }
 
   function reverseGeocode() {
-    var latitude = document.forms['edit_place_<%= params["id"] %>'].place_latitude.value;
-    var longitude = document.forms['edit_place_<%= params["id"] %>'].place_longitude.value;
+      if(location.pathname.split("/")[2] === "new"){
+        var latitude = document.forms['new_place'].place_latitude.value;
+        var longitude = document.forms['new_place'].place_longitude.value;
+      } else {
+        var latitude = document.forms['edit_place_<%= params["id"] %>'].place_latitude.value;
+        var longitude = document.forms['edit_place_<%= params["id"] %>'].place_longitude.value;
+      }
 
     var latLng = new google.maps.LatLng(latitude, longitude);
 
     geocoder.geocode( { 'latLng' : latLng }, function(results, status) {
       console.log(results);
 
-      var address = results[0].address_components[0].long_name + ", " + results[0].address_components[1].long_name + ", " + results[0].address_components[2].long_name + ", " + results[0].address_components[3].long_name + ", " + results[0].address_components[4].long_name;
+      var address = results[0].formatted_address;
 
-      document.forms['edit_place_<%= params["id"] %>'].place_address.value = address;
+        if(location.pathname.split("/")[2] === "new"){
+            document.forms['new_place'].place_address.value = address;
+        } else {
+            document.forms['edit_place_<%= params["id"] %>'].place_address.value = address;
+        }
     });
   }
 

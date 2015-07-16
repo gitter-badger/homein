@@ -13,7 +13,15 @@
 <p id="notice"><%= notice %></p>
 <p id="alert"><%= alert %></p>
 
+<!-- API request -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['google_maps_api_key'] %>" %>>
+</script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
+
 <%= yield %>
+
+<div id="map-canvas">
+</div>
 
 <% if user_signed_in? %>
     <ul id="navigation_links">

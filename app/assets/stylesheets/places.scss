@@ -23,6 +23,7 @@ html, body, #map-canvas {
         width: 40%;
         bottom: 5%;
         left: 5%;
+        z-index: 99;
         background-color: #fff;
         padding: 15px;
     }
