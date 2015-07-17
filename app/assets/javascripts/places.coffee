@@ -50,7 +50,7 @@ $(document).ready ->
             
             search()
             return 
-        else if /^\/(places)\/\d+\/?$/.test(location.pathname) # Are you on the show?
+        else if /^\/(places)\/\d+\/?(edit)?\/?$/.test(location.pathname) # Are you on the show or edit views?
             numericFilterRegex = /\/\d+(?=\/$)?/g
             
             currentNumericFilters = "id=" + location.pathname.match(numericFilterRegex)[0].substr(1)
