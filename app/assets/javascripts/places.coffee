@@ -48,7 +48,7 @@ $(document).ready ->
                     search(window.currentquery, prepareFacets(window.currentfacets))
                 )
         else if location.pathname.split("/")[2] == "new"
-        else 
+        else if location.pathname == /^\/(places)\/\d+\/?$/g
             decodeURLParams()
     
     renderPlaces = (places) ->
