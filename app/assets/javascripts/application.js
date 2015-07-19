@@ -11,8 +11,9 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui
-//= require turbolinks
 //= require algolia/v3/algoliasearch.min
+//= require turbolinks
 //= require_tree .
