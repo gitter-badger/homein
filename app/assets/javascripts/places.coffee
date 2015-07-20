@@ -136,6 +136,8 @@ $(document).ready ->
                     infoWindow.setContent(this.content)
                     infoWindow.open map, this
         
+        markerClusterer = new MarkerClusterer(map, markers)
+        
         map.fitBounds(bounds)
         map.panToBounds(bounds)
         
