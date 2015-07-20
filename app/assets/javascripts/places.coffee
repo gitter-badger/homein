@@ -60,16 +60,7 @@ $(document).ready ->
             
             return 
         else if /^\/(places)\/(new)\/?$/.test(location.pathname) # Are you on the new view?
-            center = new google.maps.LatLng(6.802066748199674, -58.16407062167349)
-            
-            marker = new google.maps.Marker 
-                position: center 
-                map: map 
-                title: 'New place'
-                draggable: true 
-                
-            infoWindow.setContent(form)
-            infoWindow.open map, marker
+            placeMarkers()
     
     search = () ->
         # Check values of parameters, otherwise return default values 
@@ -96,19 +87,29 @@ $(document).ready ->
         markers = []
         hits = currentContent.hits 
         
+        if /^\/(places)\/(new)\/?$/.test(location.pathname)
+            hits = [1]
+        
         for hit of hits  
             position = new google.maps.LatLng(hits[hit].latitude, hits[hit].longitude)
             address = hits[hit].address
             
             if /^\/(places)\/\d+\/?(edit)\/?$/.test(location.pathname)
-                marker = new google.maps.Marker 
+                markers.push new google.maps.Marker 
                     position: position
                     map: map 
                     title: 'Edit place'
                     draggable: true 
-                    
-                infoWindow.setContent(form)
-                infoWindow.open map, marker 
+                    content: form
+            else if /^\/(places)\/(new)\/?$/.test(location.pathname)
+                center = new google.maps.LatLng(6.802066748199674, -58.16407062167349)
+            
+                markers.push new google.maps.Marker 
+                    position: center 
+                    map: map 
+                    title: 'New place'
+                    draggable: true 
+                    content: form
             else 
                 content = 
                 "<h1><a href='/places/" + hits[hit].objectID + "'>" + hits[hit].address + "</a></h1>" + 
