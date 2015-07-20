@@ -18,7 +18,7 @@ $(document).ready ->
     
     map = ""
     bounds = new google.maps.LatLngBounds()
-    
+    geocoder = new google.maps.Geocoder()
     infoWindow = new google.maps.InfoWindow
     currentQuery = "*"
     currentNumericFilters = ""
@@ -142,8 +142,24 @@ $(document).ready ->
         map.panToBounds(bounds)
         
         if hits.length == 1 
+            if /^\/(places)\/(new)\/?$/.test(location.pathname) or /^\/(places)\/\d+\/(edit)\/?$/.test(location.pathname)
+                google.maps.event.addListener(markers[0], 'dragend', setLatLng)
+        
             infoWindow.setContent(markers[0].content)
             infoWindow.open map, markers[0]
+            
+    setLatLng = () ->
+        $("form .field #place_latitude").val(this.position.A)
+        $("form .field #place_longitude").val(this.position.F)
+        
+        map.panTo(this.position)
+        
+        reverseGeocode(this.position)
+        
+    reverseGeocode = (position) ->
+        geocoder.geocode( { 'latLng' : position }, (results, status) ->
+            $("form .field #place_address").val(results[0].formatted_address)
+            )
     
     initializeMap()
     decodeURL()
