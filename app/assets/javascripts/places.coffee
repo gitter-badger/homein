@@ -17,10 +17,11 @@ $(document).ready ->
     index = client.initIndex('homein_places_' + window.environment)
     
     map = ""
+    bounds = new google.maps.LatLngBounds()
+    
     infoWindow = new google.maps.InfoWindow
     currentQuery = "*"
     currentNumericFilters = ""
-    currentHits = ""
     
     currentContent = "" 
     
@@ -101,15 +102,19 @@ $(document).ready ->
                     title: 'Edit place'
                     draggable: true 
                     content: form
+                    
+                bounds.extend(position)
             else if /^\/(places)\/(new)\/?$/.test(location.pathname)
-                center = new google.maps.LatLng(6.802066748199674, -58.16407062167349)
+                position = new google.maps.LatLng(6.802066748199674, -58.16407062167349)
             
                 markers.push new google.maps.Marker 
-                    position: center 
+                    position: position 
                     map: map 
                     title: 'New place'
                     draggable: true 
                     content: form
+                    
+                bounds.extend(position)
             else 
                 content = 
                 "<h1><a href='/places/" + hits[hit].objectID + "'>" + hits[hit].address + "</a></h1>" + 
@@ -125,9 +130,14 @@ $(document).ready ->
                     id: hit
                     content: content 
                     
+                bounds.extend(position)
+                    
                 google.maps.event.addListener markers[hit], 'click', ->
                     infoWindow.setContent(this.content)
                     infoWindow.open map, this
+        
+        map.fitBounds(bounds)
+        map.panToBounds(bounds)
         
         if hits.length == 1 
             infoWindow.setContent(markers[0].content)
