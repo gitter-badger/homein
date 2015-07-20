@@ -13,7 +13,9 @@
 
   '<div class="field">' + 
     '<%= f.label :description %><br>' + 
-    '<%= f.text_field :description %>' + 
+    '<textarea name="place[description]" id="place_description">' + 
+        '<%= escape_javascript(@place.description) %>' + 
+    '</textarea>' + 
   '</div>' + 
   '<div class="field">' + 
     '<%= f.label :address %><br>' + 

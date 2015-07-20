@@ -100,23 +100,33 @@ $(document).ready ->
             position = new google.maps.LatLng(hits[hit].latitude, hits[hit].longitude)
             address = hits[hit].address
             
-            content = 
+            if /^\/(places)\/\d+\/?(edit)\/?$/.test(location.pathname)
+                marker = new google.maps.Marker 
+                    position: position
+                    map: map 
+                    title: 'Edit place'
+                    draggable: true 
+                    
+                infoWindow.setContent(form)
+                infoWindow.open map, marker 
+            else 
+                content = 
                 "<h1><a href='/places/" + hits[hit].objectID + "'>" + hits[hit].address + "</a></h1>" + 
                 "<p>" + hits[hit].description.replace(/\n/, "<br />") + "</p>" + 
                 "<p>Rooms: " + hits[hit].rooms + " Bathrooms: " + hits[hit].bathrooms + "</p>" + 
                 "<p>Price: $" + hits[hit].price + "</p>"
-            
-            markers.push  new google.maps.Marker 
-                position: position
-                map: map 
-                title: address
-                draggable: false 
-                id: hit
-                content: content 
                 
-            google.maps.event.addListener markers[hit], 'click', ->
-                infoWindow.setContent(this.content)
-                infoWindow.open map, this
+                markers.push  new google.maps.Marker 
+                    position: position
+                    map: map 
+                    title: address
+                    draggable: false 
+                    id: hit
+                    content: content 
+                    
+                google.maps.event.addListener markers[hit], 'click', ->
+                    infoWindow.setContent(this.content)
+                    infoWindow.open map, this
         
         if hits.length == 1 
             infoWindow.setContent(markers[0].content)
