@@ -122,6 +122,11 @@ $(document).ready ->
                 "<p>Rooms: " + hits[hit].rooms + " Bathrooms: " + hits[hit].bathrooms + "</p>" + 
                 "<p>Price: $" + hits[hit].price + "</p>"
                 
+                if typeof currentuser != 'undefined'
+                    if hits[hit].user_id == currentuser
+                        content += "<a href='/places/" + hits[hit].id + "/edit'>Edit</a> | " + 
+                        "<a data-confirm='Are you sure?' rel='nofollow' data-method='delete' href='/places/" + hits[hit].id + "'>Delete</a>"
+                
                 markers.push  new google.maps.Marker 
                     position: position
                     map: map 
