@@ -50,6 +50,9 @@ $(document).ready ->
                     
                     facets[facetname] = facetvalues 
             
+            if /(q=)(\w+)&?/.test(location.hash)
+                currentQuery = location.hash.match(/(q=)(\w+)&?/)[2]
+            
             search()
             return 
         else if /^\/(places)\/\d+\/?(edit)?\/?$/.test(location.pathname) # Are you on the show or edit views?
@@ -146,7 +149,7 @@ $(document).ready ->
         map.fitBounds(bounds)
         map.panToBounds(bounds)
         
-        if hits.length == 1 
+        if hits.length == 1
             if /^\/(places)\/(new)\/?$/.test(location.pathname) or /^\/(places)\/\d+\/(edit)\/?$/.test(location.pathname)
                 google.maps.event.addListener(markers[0], 'dragend', setLatLng)
         
