@@ -21,7 +21,7 @@ $(document).ready ->
     geocoder = new google.maps.Geocoder()
     infoWindow = new google.maps.InfoWindow
     currentQuery = "*"
-    currentNumericFilters = ""
+    currentNumericFilters = {}
     
     currentContent = "" 
     
@@ -48,7 +48,7 @@ $(document).ready ->
                     facetname = userfacets[facet].substr(1).split("=")[0]
                     facetvalues = [userfacets[facet].substr(1).split("=")[1].split("-")[0], userfacets[facet].substr(1).split("=")[1].split("-")[1]]
                     
-                    facets[facetname] = facetvalues 
+                    currentNumericFilters[facetname] = facetvalues 
             
             if /(q=)(\w+)&?/.test(location.hash)
                 currentQuery = location.hash.match(/(q=)(\w+)&?/)[2]
@@ -58,7 +58,7 @@ $(document).ready ->
         else if /^\/(places)\/\d+\/?(edit)?\/?$/.test(location.pathname) # Are you on the show or edit views?
             numericFilterRegex = /\/\d+(?=\/$)?/g
             
-            currentNumericFilters = "id=" + location.pathname.match(numericFilterRegex)[0].substr(1)
+            currentNumericFilters["id"] = [location.pathname.match(numericFilterRegex)[0].substr(1), location.pathname.match(numericFilterRegex)[0].substr(1)] # Not ideal, but it works... 
             
             search()
             
@@ -69,7 +69,10 @@ $(document).ready ->
     search = () ->
         # Check values of parameters, otherwise return default values 
         query = currentQuery
-        numericFilters = currentNumericFilters
+        numericFilters = []
+        for filter of currentNumericFilters
+            numericFilters.push(filter + ">=" + currentNumericFilters[filter][0])
+            numericFilters.push(filter + "<=" + currentNumericFilters[filter][1])
     
         index.search(
             query, 
