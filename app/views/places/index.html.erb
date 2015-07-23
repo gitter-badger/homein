@@ -2,10 +2,4 @@
     <input id="searchbar" name="query" placeholder="Search places" type="text">
 <% end %>
 
-<%= javascript_tag do %>
-    <% if current_user %>
-        currentuser = <%= current_user.id %>
-    <% end %>
-<% end %>
-
 <div id="facets-container"></div>

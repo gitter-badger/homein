@@ -21,7 +21,10 @@
 </div>
 
 <%= javascript_tag do %>
-    window.environment = "<%= Rails.env %>";
+    window.environment = "<%= Rails.env %>"
+    <% if current_user %>
+        currentuser = <%= current_user.id %>
+    <% end %>
 <% end %> 
 
 <% if user_signed_in? %>
