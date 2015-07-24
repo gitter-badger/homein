@@ -54,6 +54,7 @@ $(document).ready ->
                 currentQuery = location.hash.match(/(q=)(\w+)&?/)[2]
             
             search()
+            renderFacets()
             return 
         else if /^\/(places)\/\d+\/?(edit)?\/?$/.test(location.pathname) # Are you on the show or edit views?
             numericFilterRegex = /\/\d+(?=\/$)?/g
@@ -89,6 +90,58 @@ $(document).ready ->
                 
                 placeMarkers()
         )
+
+    renderFacets = () -> # Back again!
+        facets_container = $("#facets-container")
+        facets_html = ""
+
+        # First do an empty search to get the max and min values for each facet 
+        index.search(
+            "",
+            {
+                facets: "*"
+            },
+            (err, content) ->
+                if err 
+                    console.error err 
+                    return 
+
+                facets_stats = content.facets_stats 
+
+                numericFilters = {}
+                
+                for facet of facets_stats
+                    numericFilters[facet] = [ facets_stats[facet].min, facets_stats[facet].max ]
+
+                if /(\&|\#)((bathrooms)|(rooms)|(price))=\d+(-\d+)?/ig.test(location.hash)
+                    for filter of currentNumericFilters
+                        numericFilters[filter] = [ currentNumericFilters[filter][0], currentNumericFilters[filter][1] ]
+
+                for facet of numericFilters
+                    if facet == 'price'
+                        facets_html += 
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $" + numericFilters[facet][0] + " - $" + numericFilters[facet][1] + "</p>" + 
+                            "<div data-facet='" + facet + "' 
+                                data-max='" + facets_stats[facet]['max'] + "' 
+                                data-min='" + facets_stats[facet]['min'] + "'
+                            ></div>"
+                    else 
+                        facets_html +=
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": " + numericFilters[facet][0] + " - " + numericFilters[facet][1] + "</p>" + 
+                            "<div data-facet='" + facet + "' 
+                                data-max='" + facets_stats[facet]['max'] + "' 
+                                data-min='" + facets_stats[facet]['min'] + "'
+                            ></div>"
+
+                facets_container.html(facets_html)
+                
+                $("#facets-container div").slider
+                    range: true
+                    create: () ->
+                        $(this).slider( "option", "min", $(this).data("min") )
+                        $(this).slider( "option", "max", $(this).data("max") )
+                        $(this).slider( "option", "values", [ numericFilters[$(this).data("facet")][0], numericFilters[$(this).data("facet")][1] ] )
+            )
         
     placeMarkers = () ->
         markers = []
