@@ -17,6 +17,8 @@ $(document).ready ->
     index = client.initIndex('homein_places_' + window.environment)
     
     map = ""
+    markers = []
+    markerClusterer = ""
     bounds = new google.maps.LatLngBounds()
     geocoder = new google.maps.Geocoder()
     infoWindow = new google.maps.InfoWindow
@@ -88,7 +90,6 @@ $(document).ready ->
                 string = "#" + item + "=" + value_string
                 
             location.replace(string)
-            
     
     search = () ->
         # Check values of parameters, otherwise return default values 
@@ -169,10 +170,18 @@ $(document).ready ->
                         values = ui.values
                         
                         encodeURL(facet, values)
+                        decodeURL()
             )
         
     placeMarkers = () ->
+        if markers.length > 0 
+            for marker in markers 
+                marker.setMap(null)
+                
+            markerClusterer.clearMarkers()
+        
         markers = []
+        
         hits = currentContent.hits 
         
         if /^\/(places)\/(new)\/?$/.test(location.pathname)
