@@ -59,13 +59,36 @@ $(document).ready ->
         else if /^\/(places)\/\d+\/?(edit)?\/?$/.test(location.pathname) # Are you on the show or edit views?
             numericFilterRegex = /\/\d+(?=\/$)?/g
             
-            currentNumericFilters["id"] = [location.pathname.match(numericFilterRegex)[0].substr(1), location.pathname.match(numericFilterRegex)[0].substr(1)] # Not ideal, but it works... 
+            currentNumericFilters["id"] = [location.pathname.match(numericFilterRegex)[0].substr(1), location.pathname.match(numericFilterRegex)[0].substr(1)] # Not ideal, but it works
             
             search()
             
             return 
         else if /^\/(places)\/(new)\/?$/.test(location.pathname) # Are you on the new view?
             placeMarkers()
+    
+    encodeURL = (item, item_values) ->
+        string = location.hash
+        value_string = "" 
+        
+        if item_values.length > 1 
+            value_string += item_values[0] + "-" + item_values[1]
+        else if item_values.length == 1
+            value_string += item_values[0]
+        
+        if RegExp("(#|&)" + item, 'i').test(location.hash)
+            regex = RegExp("(#|&)(" + item + ")=(\\d+)(-(\\d+))?", "i")
+            string = string.replace(regex, "$1$2=" + value_string)
+            
+            location.replace(string)
+        else
+            if /#/.test(location.hash)
+                string = location.hash + "&" + item + "=" + value_string
+            else 
+                string = "#" + item + "=" + value_string
+                
+            location.replace(string)
+            
     
     search = () ->
         # Check values of parameters, otherwise return default values 
@@ -141,6 +164,11 @@ $(document).ready ->
                         $(this).slider( "option", "min", $(this).data("min") )
                         $(this).slider( "option", "max", $(this).data("max") )
                         $(this).slider( "option", "values", [ numericFilters[$(this).data("facet")][0], numericFilters[$(this).data("facet")][1] ] )
+                    stop: (event, ui) ->
+                        facet = ui.handle.parentElement.previousSibling.id 
+                        values = ui.values
+                        
+                        encodeURL(facet, values)
             )
         
     placeMarkers = () ->
