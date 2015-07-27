@@ -171,6 +171,9 @@ $(document).ready ->
                         
                         encodeURL(facet, values)
                         decodeURL()
+                    slide: (event, ui) ->
+                        ui.handle.parentElement.previousSibling.firstElementChild.value = ui.values[0]
+                        ui.handle.parentElement.previousSibling.firstElementChild.nextElementSibling.value = ui.values[1]
             )
         
     placeMarkers = () ->
