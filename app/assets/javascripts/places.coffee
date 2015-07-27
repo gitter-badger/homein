@@ -144,14 +144,14 @@ $(document).ready ->
                 for facet of numericFilters
                     if facet == 'price'
                         facets_html += 
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $<input type='number' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - $<input type='number' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $<input type='number' class='facet_input' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - $<input type='number' class='facet_input' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
                             "<div data-facet='" + facet + "' 
                                 data-max='" + facets_stats[facet]['max'] + "' 
                                 data-min='" + facets_stats[facet]['min'] + "'
                             ></div>"
                     else 
                         facets_html +=
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": <input type='number' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - <input type='number' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": <input type='number' class='facet_input' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - <input type='number' class='facet_input' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
                             "<div data-facet='" + facet + "' 
                                 data-max='" + facets_stats[facet]['max'] + "' 
                                 data-min='" + facets_stats[facet]['min'] + "'
@@ -174,6 +174,13 @@ $(document).ready ->
                     slide: (event, ui) ->
                         ui.handle.parentElement.previousSibling.firstElementChild.value = ui.values[0]
                         ui.handle.parentElement.previousSibling.firstElementChild.nextElementSibling.value = ui.values[1]
+                        
+                $("input").change () ->
+                    facet = this.parentElement.id 
+                    values = [ parseInt(this.parentElement.firstElementChild.value), parseInt(this.parentElement.firstElementChild.nextElementSibling.value) ]
+                    
+                    encodeURL(facet, values)
+                    decodeURL()
             )
         
     placeMarkers = () ->
