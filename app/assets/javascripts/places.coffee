@@ -144,14 +144,14 @@ $(document).ready ->
                 for facet of numericFilters
                     if facet == 'price'
                         facets_html += 
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $" + numericFilters[facet][0] + " - $" + numericFilters[facet][1] + "</p>" + 
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $<input type='number' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - $<input type='number' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
                             "<div data-facet='" + facet + "' 
                                 data-max='" + facets_stats[facet]['max'] + "' 
                                 data-min='" + facets_stats[facet]['min'] + "'
                             ></div>"
                     else 
                         facets_html +=
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": " + numericFilters[facet][0] + " - " + numericFilters[facet][1] + "</p>" + 
+                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": <input type='number' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - <input type='number' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
                             "<div data-facet='" + facet + "' 
                                 data-max='" + facets_stats[facet]['max'] + "' 
                                 data-min='" + facets_stats[facet]['min'] + "'
