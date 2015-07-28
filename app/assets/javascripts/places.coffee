@@ -35,7 +35,23 @@ $(document).ready ->
             center: center
         
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions)
+    
+    delay = do ->
+        timer = 0
+        (callback, ms) ->
+            clearTimeout timer
+            timer = setTimeout(callback, ms)
+            return
+    
+    $("#searchbar").keyup ->
+        value = [ this.value ]
         
+        delay (->
+            console.log value 
+            return 
+        ), 500
+        return 
+    
     decodeURL = () ->
         # First, figure out where you are 
         if /^\/(places)?\/?$/.test(location.pathname) # Are you on the index?
@@ -175,7 +191,7 @@ $(document).ready ->
                         ui.handle.parentElement.previousSibling.firstElementChild.value = ui.values[0]
                         ui.handle.parentElement.previousSibling.firstElementChild.nextElementSibling.value = ui.values[1]
                         
-                $("input").change () ->
+                $(".facet_input").change () ->
                     facet = this.parentElement.id 
                     values = [ parseInt(this.parentElement.firstElementChild.value), parseInt(this.parentElement.firstElementChild.nextElementSibling.value) ]
                     
