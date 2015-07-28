@@ -98,9 +98,9 @@ $(document).ready ->
         else if item_values.length == 1
             value_string += item_values[0]
         
-        if RegExp("(#|&)" + item, 'i').test(location.hash)
-            regex = RegExp("(#|&)(" + item + ")=(((\\d+)(-(\\d+))?)|\\w*)", "i")
-            string = string.replace(regex, "$1$2=" + value_string)
+        if RegExp("(#|&)" + item, 'i').test(decodeURIComponent(location.hash))
+            regex = RegExp("(#|&)(" + item + ")=(((\\d+)(-(\\d+))?)|(\\w|%20)*)", "i")
+            string = string.replace(regex, "$1$2=" + encodeURIComponent(value_string))
             
             location.replace(string)
         else
