@@ -46,8 +46,10 @@ $(document).ready ->
     $("#searchbar").keyup ->
         value = [ this.value ]
         
+        encodeURL("q", value)
+        
         delay (->
-            console.log value 
+            decodeURL()
             return 
         ), 500
         return 
@@ -70,6 +72,8 @@ $(document).ready ->
             
             if /(q=)(\w+)&?/.test(location.hash)
                 currentQuery = location.hash.match(/(q=)(\w+)&?/)[2]
+            else 
+                currentQuery = "*"
             
             search()
             renderFacets()
@@ -95,7 +99,7 @@ $(document).ready ->
             value_string += item_values[0]
         
         if RegExp("(#|&)" + item, 'i').test(location.hash)
-            regex = RegExp("(#|&)(" + item + ")=(\\d+)(-(\\d+))?", "i")
+            regex = RegExp("(#|&)(" + item + ")=(((\\d+)(-(\\d+))?)|\\w*)", "i")
             string = string.replace(regex, "$1$2=" + value_string)
             
             location.replace(string)
