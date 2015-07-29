@@ -15,11 +15,6 @@
 <p id="notice"><%= notice %></p>
 <p id="alert"><%= alert %></p>
 
-<%= yield %>
-
-<div id="map-canvas">
-</div>
-
 <%= javascript_tag do %>
     window.environment = "<%= Rails.env %>"
     <% if current_user %>
@@ -27,34 +22,41 @@
     <% end %>
 <% end %> 
 
-<% if user_signed_in? %>
-    <ul id="navigation_links">
-    	<li>
-    		<%= link_to current_user.email, page_path(id: "currentuser"), :id => "logged_in" %>
-    	</li>
-    	<li>
-    		<%= link_to 'Logout', destroy_user_session_path, :method => :delete, :id => "logout" %>
-    	</li>
-    	<li>
-    	    <%= link_to 'Home', root_path %>
-    	</li>
-    	<li>
-    	    <%= link_to 'New Place', new_place_path %>
-    	</li>
-	</ul>
-<% else %>
-    <ul id="navigation_links">
-    	<li>
-    		<%= link_to 'Login', new_user_session_path, :id => "login" %>
-    	</li>
-    	<li>
-    	    <%= link_to 'Register', new_user_registration_path, :id => "register" %> 
-    	</li>
-    	<li>
-    	    <%= link_to 'Home', root_path %>
-    	</li>
-	</ul>
-<% end %>
+<div id="map-canvas">
+</div>
+
+<div class="container" id="main_container">
+    <%= yield %>
+    
+    <% if user_signed_in? %>
+        <ul id="navigation_links">
+        	<li>
+        		<%= link_to current_user.email, page_path(id: "currentuser"), :id => "logged_in" %>
+        	</li>
+        	<li>
+        		<%= link_to 'Logout', destroy_user_session_path, :method => :delete, :id => "logout" %>
+        	</li>
+        	<li>
+        	    <%= link_to 'Home', root_path %>
+        	</li>
+        	<li>
+        	    <%= link_to 'New Place', new_place_path %>
+        	</li>
+    	</ul>
+    <% else %>
+        <ul id="navigation_links">
+        	<li>
+        		<%= link_to 'Login', new_user_session_path, :id => "login" %>
+        	</li>
+        	<li>
+        	    <%= link_to 'Register', new_user_registration_path, :id => "register" %> 
+        	</li>
+        	<li>
+        	    <%= link_to 'Home', root_path %>
+        	</li>
+    	</ul>
+    <% end %>
+</div>
 
 </body>
 </html>
