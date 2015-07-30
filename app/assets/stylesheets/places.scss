@@ -18,32 +18,27 @@ html, body, #map-canvas {
     	border: 1px solid #999;
     }
     
-    #facets-container {
+    .container#main_container {
         position: absolute;
         width: 40%;
         bottom: 5%;
         left: 5%;
         z-index: 99;
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.35);
         padding: 15px;
-    }
+        border-radius: 10px;
+        box-shadow: 10px 10px 25px rgba(109, 109, 109, 0.46);
     
-    #navigation_links {
-        position: absolute;
-        bottom: 15px;
-        width: 100%;
-        margin: 0 auto;
-        list-style-type: none;
-        text-align: center;
-        padding: 0;
-    }
-    
-    #searchbar {
-        position: absolute;
-        z-index: 99;
-        width: 200px;
-        left: 45%;
-        top: 5px;
+        #navigation_links {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            
+            li {
+                display: inline-block;
+                padding: 0 5px;
+            }
+        }
     }
 
     #latitude_field, #longitude_field, #contact_field, #available_field {
