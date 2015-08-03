@@ -287,8 +287,8 @@ $(document).ready ->
             infoWindow.open map, markers[0]
             
     setLatLng = () ->
-        $("form .field #place_latitude").val(this.position.A)
-        $("form .field #place_longitude").val(this.position.F)
+        $("form .field #place_latitude").val(this.position.lat())
+        $("form .field #place_longitude").val(this.position.lng())
         
         map.panTo(this.position)
         

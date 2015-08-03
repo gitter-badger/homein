@@ -30,6 +30,7 @@ class PlacesController < ApplicationController
 
     @place.user = current_user 
     @place.contact = @place.user.email 
+    @place.available = true 
 
     respond_to do |format|
       if @place.save
