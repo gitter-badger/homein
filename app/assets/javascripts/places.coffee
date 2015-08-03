@@ -88,6 +88,12 @@ $(document).ready ->
             return 
         else if /^\/(places)\/(new)\/?$/.test(location.pathname) # Are you on the new view?
             placeMarkers()
+        else if /currentuser/.test(location.pathname)
+            currentNumericFilters["user_id"] = [currentuser, currentuser]
+            
+            search()
+            
+            return 
     
     encodeURL = (item, item_values) ->
         string = location.hash
