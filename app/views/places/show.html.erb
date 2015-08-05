@@ -1,0 +1,4 @@
+<%= javascript_tag do %>
+  window.image_url = "<%= @place.picture.url %>"
+  window.image_thumb_url = "<%= @place.picture.url(:thumb) %>"
+<% end %>

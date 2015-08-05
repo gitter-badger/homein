@@ -17,3 +17,6 @@
 /tmp
 # Ignore solr
 /solr
+
+# Ignore paperclip default image path
+public/system/places/pictures/
