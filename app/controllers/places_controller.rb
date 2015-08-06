@@ -23,60 +23,77 @@ class PlacesController < ApplicationController
   def edit
   end
 
-  # POST /places
-  # POST /places.json
-  def create
-    @place = Place.new(place_params)
-
-    @place.user = current_user 
-    @place.contact = @place.user.email 
-    @place.available = true 
-
-    respond_to do |format|
-      if @place.save
-          if params[:place][:pictures]
-            params[:place][:pictures].each do |pic|
-                picture = Picture.new 
-                
-                picture.place_id = @place.id 
-                picture.image = pic 
-                picture.save
-            end 
-        end 
+    # POST /places
+    # POST /places.json
+    def create
+        @place = Place.new(place_params)
         
-        @place.index!
-        format.html { redirect_to @place, notice: 'Place was successfully created.' }
-        format.json { render :show, status: :created, location: @place }
-      else
-        format.html { render :new }
-        format.json { render json: @place.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /places/1
-  # PATCH/PUT /places/1.json
-  def update
-    respond_to do |format|
-      if @place.update(place_params)
-        if params[:place][:pictures]
-            params[:place][:pictures].each do |pic|
-                picture = Picture.new 
-                
-                picture.place_id = @place.id 
-                picture.image = pic 
-                picture.save
-            end 
-        end 
+        @place.user = current_user 
+        @place.contact = @place.user.email 
+        @place.available = true 
         
-        format.html { redirect_to @place, notice: 'Place was successfully updated.' }
-        format.json { render :show, status: :ok, location: @place }
-      else
-        format.html { render :edit }
-        format.json { render json: @place.errors, status: :unprocessable_entity }
-      end
+        respond_to do |format|
+            if params[:place][:pictures]
+                if @place.save 
+                    params[:place][:pictures].each do |pic|
+                        picture = Picture.new 
+                        
+                        picture.place_id = @place.id 
+                        picture.image = pic 
+                        picture.save
+                    end 
+                    
+                    @place.index!
+                    format.html { redirect_to @place, notice: 'Place was successfully created.' }
+                    format.json { render :show, status: :created, location: @place }
+                else
+                    format.html { render :new }
+                    format.json { render json: @place.errors, status: :unprocessable_entity }
+                end 
+            else 
+                if @place.save 
+                    @place.index!
+                    format.html { redirect_to @place, notice: 'Place was successfully created.' }
+                    format.json { render :show, status: :created, location: @place }
+                else
+                    format.html { render :new }
+                    format.json { render json: @place.errors, status: :unprocessable_entity }
+                end 
+            end
+        end
     end
-  end
+
+    # PATCH/PUT /places/1
+    # PATCH/PUT /places/1.json
+    def update
+        respond_to do |format|
+            if params[:place][:pictures]
+                if @place.update(place_params)
+                    params[:place][:pictures].each do |pic|
+                        picture = Picture.new 
+                        
+                        picture.place_id = @place.id 
+                        picture.image = pic 
+                        picture.save
+                    end 
+                    
+                    format.html { redirect_to @place, notice: 'Place was successfully updated.' }
+                    format.json { render :show, status: :ok, location: @place }
+                else 
+                    format.html { render :edit }
+                    format.json { render json: @place.errors, status: :unprocessable_entity }
+                end 
+            else
+                if @place.update(place_params)
+                    format.html { redirect_to @place, notice: 'Place was successfully updated.' }
+                    format.json { render :show, status: :ok, location: @place }
+                else 
+                    format.html { render :edit }
+                    format.json { render json: @place.errors, status: :unprocessable_entity }
+                end 
+            end 
+        end
+    end
 
   # DELETE /places/1
   # DELETE /places/1.json
