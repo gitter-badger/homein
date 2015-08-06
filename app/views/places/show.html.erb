@@ -1,4 +1,13 @@
 <%= javascript_tag do %>
-  window.image_url = "<%= @place.picture.url %>"
-  window.image_thumb_url = "<%= @place.picture.url(:thumb) %>"
+    window.image_urls = []
+    
+    <% @place.pictures.each do |picture| %>
+        window.image_urls.push("<%= picture.image.url %>")
+    <% end %>
+    
+    window.image_thumb_urls = []
+    
+    <% @place.pictures.each do |picture| %>
+        window.image_thumb_urls.push("<%= picture.image.url(:thumb) %>")
+    <% end %>
 <% end %>

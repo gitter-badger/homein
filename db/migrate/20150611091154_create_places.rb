@@ -10,7 +10,6 @@ class CreatePlaces < ActiveRecord::Migration
       t.boolean :available
       t.integer :price
       t.string  :contact
-      t.attachment :picture 
 
       t.timestamps null: false
     end

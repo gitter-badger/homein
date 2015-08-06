@@ -34,6 +34,16 @@ class PlacesController < ApplicationController
 
     respond_to do |format|
       if @place.save
+          if params[:place][:pictures]
+            params[:place][:pictures].each do |pic|
+                picture = Picture.new 
+                
+                picture.place_id = @place.id 
+                picture.image = pic 
+                picture.save
+            end 
+        end 
+        
         @place.index!
         format.html { redirect_to @place, notice: 'Place was successfully created.' }
         format.json { render :show, status: :created, location: @place }
@@ -116,6 +126,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :available, :price, :contact, :picture)
+      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :available, :price, :contact, :pictures)
     end
 end

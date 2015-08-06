@@ -255,8 +255,12 @@ $(document).ready ->
                 "<p>Price: $" + hits[hit].price + "</p>"
                 
                 if !/^\/(places)?\/?$/.test(location.pathname)
-                    if !/(missing)\.(png)/.test(image_url)
-                        content += "<a href='" + window.image_url + "' target='_blank'><img src='" + window.image_thumb_url + "' /></a><br>"
+                    i = 0
+                    while i < image_urls.length
+                        content += "<a href='" + image_urls[i] + "' target='_blank'><img src='" + image_thumb_urls[i] + "' /></a>"
+                        i++
+                        
+                content += "<br>"
                 
                 if typeof currentuser != 'undefined'
                     if hits[hit].user_id == currentuser
