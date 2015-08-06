@@ -59,6 +59,16 @@ class PlacesController < ApplicationController
   def update
     respond_to do |format|
       if @place.update(place_params)
+        if params[:place][:pictures]
+            params[:place][:pictures].each do |pic|
+                picture = Picture.new 
+                
+                picture.place_id = @place.id 
+                picture.image = pic 
+                picture.save
+            end 
+        end 
+        
         format.html { redirect_to @place, notice: 'Place was successfully updated.' }
         format.json { render :show, status: :ok, location: @place }
       else
