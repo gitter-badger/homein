@@ -1,4 +1,4 @@
-'<%= form_for(@place) do |f| %>' + 
+'<%= form_for(@place, :html => { multipart: true }) do |f| %>' + 
   <% if @place.errors.any? %>
     '<div id="error_explanation">' + 
       '<h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>' + 
@@ -49,10 +49,12 @@
     '<%= f.label :contact %><br>' + 
     '<%= f.text_field :contact %>' + 
   '</div>' + 
-  '<div class="field">' + 
-      '<%= f.label :pictures %>' + 
-      '<%= f.file_field :pictures, :multiple => true %>' + 
-  '</div>' + 
+  '<%= f.fields_for(:pictures, Picture.new) do |ff| %>' + 
+      '<div class="field">' + 
+          '<%= ff.label :image %>' + 
+          '<%= ff.file_field :image, :multiple => true, :name => "place[pictures_attributes][][image]" %>' + 
+      '</div>' + 
+  '<% end %>' + 
   '<div class="actions">' + 
     '<%= f.submit %>' + 
   '</div>' + 

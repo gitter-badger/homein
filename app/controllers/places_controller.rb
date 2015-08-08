@@ -33,33 +33,14 @@ class PlacesController < ApplicationController
         @place.available = true 
         
         respond_to do |format|
-            if params[:place][:pictures]
-                if @place.save 
-                    params[:place][:pictures].each do |pic|
-                        picture = Picture.new 
-                        
-                        picture.place_id = @place.id 
-                        picture.image = pic 
-                        picture.save
-                    end 
-                    
-                    @place.index!
-                    format.html { redirect_to @place, notice: 'Place was successfully created.' }
-                    format.json { render :show, status: :created, location: @place }
-                else
-                    format.html { render :new }
-                    format.json { render json: @place.errors, status: :unprocessable_entity }
-                end 
-            else 
-                if @place.save 
-                    @place.index!
-                    format.html { redirect_to @place, notice: 'Place was successfully created.' }
-                    format.json { render :show, status: :created, location: @place }
-                else
-                    format.html { render :new }
-                    format.json { render json: @place.errors, status: :unprocessable_entity }
-                end 
-            end
+            if @place.save 
+                @place.index!
+                format.html { redirect_to @place, notice: 'Place was successfully created.' }
+                format.json { render :show, status: :created, location: @place }
+            else
+                format.html { redirect_to new_place_path, alert: @place.errors.messages.first[1][0] }
+                format.json { render json: @place.errors, status: :unprocessable_entity }
+            end 
         end
     end
 
@@ -67,30 +48,13 @@ class PlacesController < ApplicationController
     # PATCH/PUT /places/1.json
     def update
         respond_to do |format|
-            if params[:place][:pictures]
-                if @place.update(place_params)
-                    params[:place][:pictures].each do |pic|
-                        picture = Picture.new 
-                        
-                        picture.place_id = @place.id 
-                        picture.image = pic 
-                        picture.save
-                    end 
-                    
-                    format.html { redirect_to @place, notice: 'Place was successfully updated.' }
-                    format.json { render :show, status: :ok, location: @place }
-                else 
-                    format.html { render :edit }
-                    format.json { render json: @place.errors, status: :unprocessable_entity }
-                end 
+            if @place.update(place_params)
+                @place.index!
+                format.html { redirect_to @place, notice: 'Place was successfully updated.' }
+                format.json { render :show, status: :created, location: @place }
             else
-                if @place.update(place_params)
-                    format.html { redirect_to @place, notice: 'Place was successfully updated.' }
-                    format.json { render :show, status: :ok, location: @place }
-                else 
-                    format.html { render :edit }
-                    format.json { render json: @place.errors, status: :unprocessable_entity }
-                end 
+                format.html { redirect_to edit_place_path(@place), alert: @place.errors.messages.first[1][0] }
+                format.json { render json: @place.errors, status: :unprocessable_entity }
             end 
         end
     end
@@ -153,6 +117,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :available, :price, :contact, :pictures)
+      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :available, :price, :contact, pictures_attributes: [:image]) 
     end
 end
