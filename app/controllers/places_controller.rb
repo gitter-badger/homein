@@ -17,10 +17,12 @@ class PlacesController < ApplicationController
   # GET /places/new
   def new
     @place = Place.new
+    @pictures = @place.pictures
   end
 
   # GET /places/1/edit
   def edit
+      @pictures = @place.pictures
   end
 
     # POST /places
