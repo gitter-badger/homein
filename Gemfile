@@ -34,8 +34,9 @@ gem 'high_voltage'
 # Authentication with devise
 gem 'devise'
 
-# Paperclip for images 
+# Paperclip and AWS for images 
 gem "paperclip", "~> 4.3"
+gem "aws-sdk"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
