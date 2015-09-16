@@ -254,7 +254,7 @@ $(document).ready ->
                 "<p>Rooms: " + hits[hit].rooms + " Bathrooms: " + hits[hit].bathrooms + "</p>" + 
                 "<p>Price: $" + hits[hit].price + "</p>"
                 
-                if /^\/(places)\/\d\/?$/.test(location.pathname)
+                if /^\/(places)\/\d+\/?$/.test(location.pathname)
                     i = 0
                     while i < image_urls.length
                         content += "<a href='" + image_urls[i] + "' target='_blank'><img src='" + image_thumb_urls[i] + "' /></a>"

@@ -1,0 +1,4 @@
+client_id: <%= ENV['imgur_client_id'] %>
+client_secret: <%= ENV['imgur_client_secret'] %>
+refresh_token: <%= ENV['imgur_refresh_token'] %>
+access_token: <%= ENV['imgur_access_token'] %>
