@@ -56,7 +56,7 @@
       '</div>' + 
   '<% end %>' + 
   <% @pictures.each do |picture| %>
-    '<%= link_to place_picture_path(@place, picture), method: :delete, data: {confirm: "Are you sure?"} do %>' + 
+    '<%= link_to place_picture_path(@place, picture), method: :delete, data: {confirm: "Are you sure? This will delete this picture."} do %>' + 
       '<%= image_tag picture.image.url(:small) %>' + 
     '<% end %>' +
   <% end %>
