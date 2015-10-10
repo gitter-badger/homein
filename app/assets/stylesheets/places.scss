@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@import 'icons';
+@import 'icons', 'colours';
 
 a {
     text-decoration: none;
@@ -40,11 +40,27 @@ html, body, #map-canvas {
             padding: 0;
             text-align: center;
             
-            li {
-                display: inline-block;
-                padding: 0 5px;
+            a {
+                color: #333;
+            }
+            
+            a:hover {
+                color: $highlight-color;
             }
         }
+    }
+    
+    .fa {
+        font-size: 1.5em;
+        padding: 0 5px;
+    }
+    
+    .place-management-link {
+        color: #333;
+    }
+    
+    .place-management-link:hover {
+        color: $highlight-color;
     }
 
     #latitude_field, #longitude_field, #contact_field, #available_field {
