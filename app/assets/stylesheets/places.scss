@@ -59,6 +59,13 @@ html, body, #map-canvas {
         font-size: 1em;
     }
     
+    #toggle-filter-button {
+        position: absolute;
+        bottom: 0;
+        margin: 50px;
+        z-index: 100; // I'm starting to feel like using z-index too much is a sign of bad design... 
+    }
+    
     .place-management-link {
         color: #333;
     }

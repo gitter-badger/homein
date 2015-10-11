@@ -307,5 +307,8 @@ $(document).ready ->
             $("form .field #place_address").val(results[0].formatted_address)
             )
     
+    $("#toggle-filter-button").click () -> 
+        $("#facets-container").toggle()
+    
     initializeMap()
     decodeURL()
