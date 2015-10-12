@@ -31,6 +31,9 @@
 <div class="container" id="main_container">
     <%= yield %>
     
+    <% if !current_page?(root_path) %>
+      <div id="options-container">
+    <% end %>
     <% if user_signed_in? %>
         <ul id="navigation_links" class="two-column">
     		<%= link_to root_path do %>

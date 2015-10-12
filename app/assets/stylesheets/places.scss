@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@import 'icons', 'colours';
+@import 'icons', 'colours', 'transitions';
 
 a {
     text-decoration: none;
@@ -60,10 +60,12 @@ html, body, #map-canvas {
             
             #toggle-filter-button {
                 color: #333;
+                padding: 0;
             }
             
             #toggle-filter-button:hover {
                 color: $highlight-color;
+                cursor: pointer;
             }
             
             #navigation_links {
