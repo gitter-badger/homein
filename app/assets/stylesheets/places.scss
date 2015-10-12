@@ -34,7 +34,27 @@ html, body, #map-canvas {
         padding: 15px;
         border-radius: 2px;
         box-shadow: 5px 5px 10px rgba(109, 109, 109, 0.25);
-    
+        
+        .facet-container {
+            display: flex;
+            justify-content: center;
+            height: 30px;
+            margin: 10px 0;
+            
+            p {
+                width: 360px;
+                margin: 0 10px 0 0;
+                
+                input {
+                    width: 50px;
+                }
+            }
+            
+            .ui-slider {
+                width: 100%;
+            }
+        }
+        
         #options-container {
             display: flex;
             margin: 10px 0;

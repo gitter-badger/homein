@@ -168,6 +168,8 @@ $(document).ready ->
                         numericFilters[filter] = [ currentNumericFilters[filter][0], currentNumericFilters[filter][1] ]
 
                 for facet of numericFilters
+                    facets_html += "<div class=\"facet-container\">"
+                    
                     if facet == 'price'
                         facets_html += 
                             "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $<input type='number' class='facet_input' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - $<input type='number' class='facet_input' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
@@ -182,10 +184,12 @@ $(document).ready ->
                                 data-max='" + facets_stats[facet]['max'] + "' 
                                 data-min='" + facets_stats[facet]['min'] + "'
                             ></div>"
+                            
+                    facets_html += "</div>"
 
                 facets_container.html(facets_html)
                 
-                $("#facets-container div").slider
+                $("#facets-container .facet-container div").slider
                     range: true
                     create: () ->
                         $(this).slider( "option", "min", $(this).data("min") )
