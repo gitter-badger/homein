@@ -35,17 +35,53 @@ html, body, #map-canvas {
         border-radius: 2px;
         box-shadow: 5px 5px 10px rgba(109, 109, 109, 0.25);
     
-        #navigation_links {
-            list-style-type: none;
-            padding: 0;
-            text-align: center;
+        #options-container {
+            display: flex;
+            margin: 10px 0;
+            justify-content: center;
             
-            a {
+            i, ul, span {
+                height: 30px;
+                margin: 0 10px;
+                
+                i {
+                    height: auto;
+                }
+                
+                #searchbar {
+                    height: 100%;
+                    border: none;
+                }
+                
+                #searchbar:focus {
+                    outline: none;
+                }
+            }
+            
+            #toggle-filter-button {
                 color: #333;
             }
             
-            a:hover {
+            #toggle-filter-button:hover {
                 color: $highlight-color;
+            }
+            
+            #navigation_links {
+                list-style-type: none;
+                padding: 0;
+                text-align: center;
+                
+                a {
+                    color: #333;
+                    
+                    i {
+                        margin: 0;
+                    }
+                }
+                
+                a:hover {
+                    color: $highlight-color;
+                }
             }
         }
     }
