@@ -81,4 +81,12 @@ Rails.application.configure do
     config.paperclip_defaults = {
         :storage => :imgur
     }
+    
+    config.action_mailer.default_url_options = {:host => ENV['production_host']}
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      :address => "127.0.0.1",
+      :port    => 25,
+      :domain  => ENV['production_host']
+    }
 end
