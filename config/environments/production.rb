@@ -89,4 +89,17 @@ Rails.application.configure do
       :port    => 25,
       :domain  => ENV['production_host']
     }
+    
+    
+    
+    ActionMailer::Base.delivery_method = :smtp
+    ActionMailer::Base.smtp_settings = {
+       :tls => true,
+       :address => "smtp.gmail.com",
+       :port => 587,
+       :domain => "gmail.com",
+       :authentication => :login,
+       :user_name => ENV['homein_gmail_username'],
+       :password => ENV['homein_gmail_password']
+    }
 end
