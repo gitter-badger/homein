@@ -90,16 +90,16 @@ Rails.application.configure do
       :domain  => ENV['production_host']
     }
     
-    
-    
-    ActionMailer::Base.delivery_method = :smtp
+    # Disable delivery errors, bad email addresses will be ignored
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.default_url_options = { :host => 'floating-headland-8577.heroku.com' }
     ActionMailer::Base.smtp_settings = {
-       :tls => true,
-       :address => "smtp.gmail.com",
-       :port => 587,
-       :domain => "gmail.com",
-       :authentication => :login,
-       :user_name => ENV['homein_gmail_username'],
-       :password => ENV['homein_gmail_password']
+      :address    => "smtp.sendgrid.net",
+      :port       => 25,
+      :user_name  => ENV['SENDGRID_USERNAME'],
+      :password   => ENV['SENDGRID_PASSWORD'],
+      :domain     => ENV['SENDGRID_DOMAIN'],
+      :authentication  => :plain
     }
 end
