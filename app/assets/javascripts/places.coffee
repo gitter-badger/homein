@@ -268,9 +268,9 @@ $(document).ready ->
                 
                 if typeof currentuser != 'undefined'
                     if hits[hit].user_id == currentuser
-                        content += "<a href='/places/" + hits[hit].id + "/edit' class=\"place-management-link\"><i class=\"fa fa-pencil\"></i>
+                        content += "<a href='/places/" + hits[hit].id + "/edit' class=\"place-management-link\"><i class=\"fa fa-pencil\" title=\"Edit place\"></i>
                         </a>" + 
-                        "<a data-confirm='Are you sure you want to delete this place?' rel='nofollow' data-method='delete' href='/places/" + hits[hit].id + "' class=\"place-management-link\"><i class=\"fa fa-trash-o\"></i></a>"
+                        "<a data-confirm='Are you sure you want to delete this place?' rel='nofollow' data-method='delete' href='/places/" + hits[hit].id + "' class=\"place-management-link\"><i class=\"fa fa-trash-o\" title=\"Delete place\"></i></a>"
                 
                 markers.push  new google.maps.Marker 
                     position: position

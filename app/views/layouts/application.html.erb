@@ -36,16 +36,16 @@
     <% end %>
     <% if user_signed_in? %>
         <ul id="navigation_links" class="two-column">
-    		<%= link_to root_path do %>
+    		<%= link_to root_path, :title => "Home" do %>
     		    <i class="fa fa-home"></i>
     		<% end %>
-        	<%= link_to page_path(id: "currentuser"), :id => "logged_in" do %>
+        	<%= link_to page_path(id: "currentuser"), :id => "logged_in", :title => "View your places" do %>
                 <i class="fa fa-user"></i>
         	<% end %>
-    	    <%= link_to destroy_user_session_path, :method => :delete, :id => "logout" do %>
+    	    <%= link_to destroy_user_session_path, :method => :delete, :id => "logout", :title => "Logout" do %>
                 <i class="fa fa-sign-out"></i>
     	    <% end %>
-    	    <%= link_to new_place_path do %>
+    	    <%= link_to new_place_path, :title => "Add a place" do %>
     	      <i class="fa fa-plus"></i>
     	    <% end %>
     	</ul>
@@ -54,10 +54,10 @@
             <%= link_to root_path do %>
     	        <i class="fa fa-home"></i>
     	    <% end %>
-    		<%= link_to new_user_session_path, :id => "login" do %>
+    		<%= link_to new_user_session_path, :id => "login", :title => "Login" do %>
     		    <i class="fa fa-sign-in"></i>
     		<% end %>
-    	    <%= link_to new_user_registration_path, :id => "register" do %> 
+    	    <%= link_to new_user_registration_path, :id => "register", :title => "Register" do %> 
                 <i class="fa fa-user-plus"></i>
     	    <% end %>
     	</ul>
