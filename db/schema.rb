@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20150806000320) do
     t.float    "longitude"
     t.integer  "rooms"
     t.integer  "bathrooms"
-    t.boolean  "available"
+    t.string   "for"
     t.integer  "price"
     t.string   "contact"
     t.datetime "created_at",  null: false

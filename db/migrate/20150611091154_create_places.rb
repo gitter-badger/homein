@@ -7,7 +7,7 @@ class CreatePlaces < ActiveRecord::Migration
       t.float   :longitude
       t.integer :rooms
       t.integer :bathrooms
-      t.boolean :available
+      t.string  :for 
       t.integer :price
       t.string  :contact
 

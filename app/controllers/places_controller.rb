@@ -32,7 +32,6 @@ class PlacesController < ApplicationController
         
         @place.user = current_user 
         @place.contact = @place.user.email 
-        @place.available = true 
         
         respond_to do |format|
             if @place.save 
@@ -119,6 +118,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :available, :price, :contact, pictures_attributes: [:image]) 
+      params.require(:place).permit(:description, :address, :latitude, :longitude, :rooms, :bathrooms, :for, :price, :contact, pictures_attributes: [:image]) 
     end
 end

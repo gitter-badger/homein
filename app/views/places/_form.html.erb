@@ -1,66 +1,66 @@
-'<%= form_for(@place, :html => { multipart: true }) do |f| %>' + 
+<%= form_for(@place, :html => { multipart: true }) do |f| %>
   <% if @place.errors.any? %>
-    '<div id="error_explanation">' + 
-      '<h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>' + 
+    <div id="error_explanation">
+      <h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>
 
-      '<ul>' + 
+      <ul>
       <% @place.errors.full_messages.each do |message| %>
-        '<li><%= message %></li>' + 
+        <li><%= message %></li>
       <% end %>
-      '</ul>' + 
-    '</div>' + 
+      </ul>
+    </div>
   <% end %>
 
-  '<div class="field">' + 
-    '<%= f.label :description %><br>' + 
-    '<textarea name="place[description]" id="place_description">' + 
-        '<%= escape_javascript(@place.description) %>' + 
-    '</textarea>' + 
-  '</div>' + 
-  '<div class="field">' + 
-    '<%= f.label :address %><br>' + 
-    '<%= f.text_field :address %>' + 
-  '</div>' + 
-  '<div class="field" id="latitude_field">' + 
-    '<%= f.label :latitude %><br>' + 
-    '<%= f.text_field :latitude %>' + 
-  '</div>' + 
-  '<div class="field" id="longitude_field">' + 
-    '<%= f.label :longitude %><br>' + 
-    '<%= f.text_field :longitude %>' + 
-  '</div>' + 
-  '<div class="field">' + 
-    '<%= f.label :rooms %><br>' + 
-    '<%= f.number_field :rooms %>' + 
-  '</div>' + 
-  '<div class="field">' + 
-    '<%= f.label :bathrooms %><br>' + 
-    '<%= f.number_field :bathrooms %>' + 
-  '</div>' + 
-  '<div class="field" id="available_field">' + 
-    '<%= f.label :available %><br>' + 
-    '<%= f.check_box :available %>' + 
-  '</div>' + 
-  '<div class="field">' + 
-    '<%= f.label :price %><br>' + 
-    '<%= f.number_field :price %>' + 
-  '</div>' + 
-  '<div class="field" id="contact_field">' + 
-    '<%= f.label :contact %><br>' + 
-    '<%= f.text_field :contact %>' + 
-  '</div>' + 
-  '<%= f.fields_for(:pictures, Picture.new) do |ff| %>' + 
-      '<div class="field">' + 
-          '<%= ff.label :image %>' + 
-          '<%= ff.file_field :image, :multiple => true, :name => "place[pictures_attributes][][image]" %>' + 
-      '</div>' + 
-  '<% end %>' + 
-  <% @pictures.each do |picture| %>
-    '<%= link_to place_picture_path(@place, picture), method: :delete, data: {confirm: "Are you sure? This will delete this picture."}, :title => "Delete this picture" do %>' + 
-      '<%= image_tag picture.image.url(:small) %>' + 
-    '<% end %>' +
+  <div class="field">
+    <%= f.label :description %><br>
+    <textarea name="place[description]" id="place_description">
+        <%= @place.description %>
+    </textarea>
+  </div>
+  <div class="field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %>
+  </div>
+  <div class="field" id="latitude_field">
+    <%= f.label :latitude %><br>
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field" id="longitude_field">
+    <%= f.label :longitude %><br>
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :rooms %><br>
+    <%= f.number_field :rooms %>
+  </div>
+  <div class="field">
+    <%= f.label :bathrooms %><br>
+    <%= f.number_field :bathrooms %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br>
+    <%= f.number_field :price %>
+  </div>
+  <div class="field" id="for_field">
+      <%= f.label :for %><br>
+      <%= f.select :for, [["Rent", "Rent"], ["Sale", "Sale"]] %>
+  </div>
+  <div class="field" id="contact_field">
+    <%= f.label :contact %><br>
+    <%= f.text_field :contact %>
+  </div>
+  <%= f.fields_for(:pictures, Picture.new) do |ff| %>
+      <div class="field">
+          <%= ff.label :image %>
+          <%= ff.file_field :image, :multiple => true, :name => "place[pictures_attributes][][image]" %>
+      </div>
   <% end %>
-  '<div class="actions">' + 
-    '<%= f.submit %>' + 
-  '</div>' + 
-'<% end %>'
+  <% @pictures.each do |picture| %>
+    <%= link_to place_picture_path(@place, picture), method: :delete, data: {confirm: "Are you sure? This will delete this picture."}, :title => "Delete this picture" do %>
+      <%= image_tag picture.image.url(:small) %>
+    <% end %>
+  <% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

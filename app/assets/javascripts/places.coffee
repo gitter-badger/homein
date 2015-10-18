@@ -152,6 +152,8 @@ $(document).ready ->
                 facets: "*"
             },
             (err, content) ->
+                console.log content
+                
                 if err 
                     console.error err 
                     return 
@@ -256,7 +258,12 @@ $(document).ready ->
                 "<h1><a href='/places/" + hits[hit].objectID + "'>" + hits[hit].address + "</a></h1>" + 
                 "<p>" + hits[hit].description.replace(/\n/, "<br />") + "</p>" + 
                 "<p>Rooms: " + hits[hit].rooms + " Bathrooms: " + hits[hit].bathrooms + "</p>" + 
-                "<p>Price: $" + hits[hit].price + "</p>"
+                "<p>Price: $" + hits[hit].price
+                
+                if hits[hit].for == "Rent"
+                    content += " per month"
+                
+                content += "</p>"
                 
                 if /^\/(places)\/\d+\/?$/.test(location.pathname)
                     i = 0
