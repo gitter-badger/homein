@@ -24,6 +24,7 @@ $(document).ready ->
     infoWindow = new google.maps.InfoWindow
     currentQuery = "*"
     currentNumericFilters = {}
+    place_for = ""
     
     currentContent = "" 
     
@@ -58,7 +59,7 @@ $(document).ready ->
         # First, figure out where you are 
         if /^\/(places)?\/?$/.test(location.pathname) # Are you on the index?
             # Capture the facets in the location hash 
-            facetsregex = /(\&|\#)((bathrooms)|(rooms)|(price))=\d+(-\d+)?/ig 
+            facetsregex = /(\&|\#)((((bathrooms)|(rooms)|(price))=\d+(-\d+)?)|(for=(rent|sale)))/ig 
             if facetsregex.test(location.hash)
                 userfacets = location.hash.match(facetsregex)
                 
@@ -68,7 +69,10 @@ $(document).ready ->
                     facetname = userfacets[facet].substr(1).split("=")[0]
                     facetvalues = [userfacets[facet].substr(1).split("=")[1].split("-")[0], userfacets[facet].substr(1).split("=")[1].split("-")[1]]
                     
-                    currentNumericFilters[facetname] = facetvalues 
+                    if facetname != "for"
+                        currentNumericFilters[facetname] = facetvalues 
+                    else 
+                        place_for = facetvalues[0]
             
             if /(q=)(\w+)&?/.test(location.hash)
                 currentQuery = location.hash.match(/(q=)(\w+)&?/)[2]
@@ -129,7 +133,8 @@ $(document).ready ->
             query, 
             {
                 facets: "*"
-                numericFilters: numericFilters
+                numericFilters: numericFilters,
+                facetFilters: "for:#{place_for}"
             },
             (err, content) ->
                 if err 
