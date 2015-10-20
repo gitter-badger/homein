@@ -143,6 +143,7 @@ $(document).ready ->
 
     renderFacets = () -> # Back again!
         facets_container = $("#facets-container")
+        facets_stats = {}
         facets_html = ""
 
         # First do an empty search to get the max and min values for each facet 
@@ -152,13 +153,17 @@ $(document).ready ->
                 facets: "*"
             },
             (err, content) ->
-                console.log content
+                window.thecontent = content
                 
                 if err 
                     console.error err 
                     return 
-
-                facets_stats = content.facets_stats 
+                    
+                for facet of content.facets_stats 
+                    facets_stats[facet] = {
+                        "max": Math.max.apply(Math, Object.keys(content.facets[facet])),
+                        "min": Math.min.apply(Math, Object.keys(content.facets[facet]))
+                    }
 
                 numericFilters = {}
                 
@@ -188,6 +193,20 @@ $(document).ready ->
                             ></div>"
                             
                     facets_html += "</div>"
+                    
+                facets_html += 
+                    "<div class=\"facet-container\">
+                        <label for=\"place_for\">
+                            For: 
+                        </label>
+                        
+                        <select id=\"place_for\">
+                            <option value=\"all\">All</option>"
+                            
+                for option in Object.keys(content.facets["for"])
+                    facets_html += "<option value=\"#{option}\">#{option}</option>"
+                    
+                facets_html += "</select></div>"
 
                 facets_container.html(facets_html)
                 
