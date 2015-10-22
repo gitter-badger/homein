@@ -344,3 +344,15 @@ $(document).ready ->
     
     initializeMap()
     decodeURL()
+    
+    showIntroduction = () ->
+        alert "Welcome to homein!\n
+            This is just a preview, where you can play around with the facets to understand what homein does.\n
+            The places you see here aren't actually for sale or rent. They're just placeholders.\n
+            If you happen not to see anything here then I've probably cleared the development database for some reason or another. More stuff will appear here eventually once I can start working again."
+    
+    if /first_load=1/.test(document.cookie)
+        null 
+    else 
+        showIntroduction()
+        document.cookie = "first_load=1"
