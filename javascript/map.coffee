@@ -174,34 +174,23 @@ $(document).ready ->
                         numericFilters[filter] = [ currentNumericFilters[filter][0], currentNumericFilters[filter][1] ]
 
                 for facet of numericFilters
-                    facets_html += "<div class=\"facet-container\">"
-                    
-                    if facet == 'price'
-                        facets_html += 
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": $<input type='number' class='facet_input' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - $<input type='number' class='facet_input' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
-                            "<div data-facet='" + facet + "' 
-                                data-max='" + facets_stats[facet]['max'] + "' 
-                                data-min='" + facets_stats[facet]['min'] + "'
-                            ></div>"
-                    else 
-                        facets_html +=
-                            "<p id='" + facet + "'>" + facet.capitalizeFirstLetter() + ": <input type='number' class='facet_input' value='" + numericFilters[facet][0] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /> - <input type='number' class='facet_input' value='" + numericFilters[facet][1] + "' min='" + facets_stats[facet]['min'] + "' max='" + facets_stats[facet]['max'] + "' /></p>" + 
-                            "<div data-facet='" + facet + "' 
-                                data-max='" + facets_stats[facet]['max'] + "' 
-                                data-min='" + facets_stats[facet]['min'] + "'
-                            ></div>"
+                    facets_html += 
+                        "<div class=\"facet\" id=\"#{facet}\">
+                            #{facet.capitalizeFirstLetter()}: 
                             
-                    facets_html += "</div>"
+                            $<input type=\"number\" step=\"1\" class=\"minimum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][0])}\">
+                            
+                            <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{facets_stats[facet]["min"]}\" data-max=\"#{facets_stats[facet]["max"]}\"></div>
+                            
+                            $<input type=\"number\" step=\"1\" class=\"maximum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][1])}\">
+                        </div>"
                     
                 facets_html += 
-                    "<div class=\"facet-container\">
-                        <p id=\"for\">
-                            <label for=\"place_for\">
-                                For: 
-                            </label>
-                            
-                            <select id=\"place_for\" class=\"facet_input\">
-                                <option value=\" \">All</option>"
+                    "<div class=\"facet\" id=\"for\">
+                        For: 
+                        
+                        <select id=\"place_for\" class=\"facet_input\">
+                            <option value=\" \">All</option>"
                             
                 for option in Object.keys(content.facets["for"])
                     facets_html += "<option value=\"#{option}\""
@@ -211,26 +200,32 @@ $(document).ready ->
                     
                     facets_html += ">#{option}</option>"
                     
-                facets_html += "</select></p></div>"
+                facets_html += 
+                        "</select>
+                    </div>"
 
                 facets_container.html(facets_html)
                 
-                $("#facets-container .facet-container div").slider
-                    range: true
+                $("#facets-container .slider").slider
+                    range: true,
                     create: () ->
                         $(this).slider( "option", "min", $(this).data("min") )
                         $(this).slider( "option", "max", $(this).data("max") )
                         $(this).slider( "option", "values", [ numericFilters[$(this).data("facet")][0], numericFilters[$(this).data("facet")][1] ] )
                     stop: (event, ui) ->
-                        facet = ui.handle.parentElement.previousSibling.id 
+                        facet = ui.handle.parentElement.parentElement.id 
                         values = ui.values
+                        
+                        window.numfilters = numericFilters
                         
                         encodeURL(facet, values)
                         decodeURL()
                     slide: (event, ui) ->
-                        ui.handle.parentElement.previousSibling.firstElementChild.value = ui.values[0]
-                        ui.handle.parentElement.previousSibling.firstElementChild.nextElementSibling.value = ui.values[1]
+                        facet = $(this).data("facet") 
                         
+                        $("##{facet} .minimum").val(ui.values[0])
+                        $("##{facet} .maximum").val(ui.values[1])
+                
                 $(".facet_input").change () ->
                     facet = this.parentElement.id 
                     

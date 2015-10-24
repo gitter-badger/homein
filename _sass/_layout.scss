@@ -12,33 +12,26 @@ body {
     background-color: #fff;
     z-index: 2;
     display: flex;
-    flex-wrap: wrap;
-    width: 400px;
+    flex-direction: column;
+    width: 800px;
     height: auto;
     margin: 10px;
     padding: 10px;
     bottom: 0%;
     box-sizing: border-box;
-    justify-content: center;
     
-    .facet-container {
+    .facet {
         display: flex;
-        justify-content: center;
-        height: 30px;
+        flex-direction: row;
         margin: 10px 0;
-        flex-wrap: wrap;
         
-        p {
-            width: 360px;
-            margin: 0 10px 0 0;
-            
-            input {
-                width: 50px;
-            }
+        input {
+            border: 0;
         }
         
-        .ui-slider {
-            width: 100%;
+        .slider {
+            flex-grow: 2;
+            margin: 0 20px;
         }
     }
 }
