@@ -3,6 +3,19 @@
 String.prototype.capitalizeFirstLetter = () -> 
     this.charAt(0).toUpperCase() + this.slice(1)
 
+delay = do ->
+        timer = 0
+        (callback, ms) ->
+            clearTimeout timer
+            timer = setTimeout(callback, ms)
+            return
+            
+window.destroyNotification = () ->
+    delay (->
+        $("#notification-box").html("")
+        return
+    ), 5000
+
 $(document).ready ->
     ApplicationID = '3J0AVN6KSY'
     
@@ -181,7 +194,8 @@ $(document).ready ->
                     if facet == "price" 
                         facets_html += "$"
                             
-                    facets_html += "<input type=\"number\" step=\"1\" class=\"minimum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][0])}\">
+                    facets_html += 
+                            "<input type=\"number\" step=\"1\" class=\"minimum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][0])}\">
                             
                             <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{facets_stats[facet]["min"]}\" data-max=\"#{facets_stats[facet]["max"]}\"></div>"
                     
@@ -189,7 +203,7 @@ $(document).ready ->
                         facets_html += "$"
                     
                     facets_html += 
-                        "<input type=\"number\" step=\"1\" class=\"maximum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][1])}\">
+                            "<input type=\"number\" step=\"1\" class=\"maximum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][1])}\">
                         </div>"
                     
                 facets_html += 
@@ -286,7 +300,7 @@ $(document).ready ->
                 bounds.extend(position)
             else 
                 content = 
-                "<h1><a href=\"##{location.hash.substr(1)}\">#{hits[hit].address}</a></h1>
+                "<h1><a href=\"##{location.hash.substr(1)}\" onclick=\"$('#notification-box').html('This preview will not show you individual places yet!'); destroyNotification();\">#{hits[hit].address}</a></h1>
                 <p>#{hits[hit].description.replace(/\n/, "<br />")}</p>
                 <p>Rooms: #{hits[hit].rooms} Bathrooms: #{hits[hit].bathrooms}</p>
                 <p>Price: $#{hits[hit].price}"
