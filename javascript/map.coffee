@@ -176,13 +176,20 @@ $(document).ready ->
                 for facet of numericFilters
                     facets_html += 
                         "<div class=\"facet\" id=\"#{facet}\">
-                            #{facet.capitalizeFirstLetter()}: 
+                            #{facet.capitalizeFirstLetter()}: "
                             
-                            $<input type=\"number\" step=\"1\" class=\"minimum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][0])}\">
+                    if facet == "price" 
+                        facets_html += "$"
                             
-                            <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{facets_stats[facet]["min"]}\" data-max=\"#{facets_stats[facet]["max"]}\"></div>
+                    facets_html += "<input type=\"number\" step=\"1\" class=\"minimum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][0])}\">
                             
-                            $<input type=\"number\" step=\"1\" class=\"maximum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][1])}\">
+                            <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{facets_stats[facet]["min"]}\" data-max=\"#{facets_stats[facet]["max"]}\"></div>"
+                    
+                    if facet == "price"
+                        facets_html += "$"
+                    
+                    facets_html += 
+                        "<input type=\"number\" step=\"1\" class=\"maximum\" min=\"#{facets_stats[facet]["min"]}\" max=\"#{facets_stats[facet]["max"]}\" value=\"#{parseInt(numericFilters[facet][1])}\">
                         </div>"
                     
                 facets_html += 
@@ -214,11 +221,11 @@ $(document).ready ->
                         $(this).slider( "option", "values", [ numericFilters[$(this).data("facet")][0], numericFilters[$(this).data("facet")][1] ] )
                     stop: (event, ui) ->
                         facet = ui.handle.parentElement.parentElement.id 
+                        
                         values = ui.values
                         
-                        window.numfilters = numericFilters
-                        
                         encodeURL(facet, values)
+                        
                         decodeURL()
                     slide: (event, ui) ->
                         facet = $(this).data("facet") 
@@ -279,10 +286,10 @@ $(document).ready ->
                 bounds.extend(position)
             else 
                 content = 
-                "<h1><a href='/places/" + hits[hit].objectID + "'>" + hits[hit].address + "</a></h1>" + 
-                "<p>" + hits[hit].description.replace(/\n/, "<br />") + "</p>" + 
-                "<p>Rooms: " + hits[hit].rooms + " Bathrooms: " + hits[hit].bathrooms + "</p>" + 
-                "<p>Price: $" + hits[hit].price
+                "<h1><a href=\"##{location.hash.substr(1)}\">#{hits[hit].address}</a></h1>
+                <p>#{hits[hit].description.replace(/\n/, "<br />")}</p>
+                <p>Rooms: #{hits[hit].rooms} Bathrooms: #{hits[hit].bathrooms}</p>
+                <p>Price: $#{hits[hit].price}"
                 
                 if hits[hit].for == "Rent"
                     content += " per month"
