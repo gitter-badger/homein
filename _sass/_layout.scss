@@ -16,7 +16,7 @@ body {
     position: fixed;
 }
 
-#facets-container {
+#main-container {
     position: absolute;
     background-color: #fff;
     z-index: 2;
@@ -29,18 +29,20 @@ body {
     bottom: 0%;
     box-sizing: border-box;
     
-    .facet {
-        display: flex;
-        flex-direction: row;
-        margin: 10px 0;
-        
-        input {
-            border: 0;
-        }
-        
-        .slider {
-            flex-grow: 2;
-            margin: 0 20px;
+    input {
+        border: 0;
+    }
+    
+    #facets-container {
+        .facet {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+            
+            .slider {
+                flex-grow: 2;
+                margin: 0 20px;
+            }
         }
     }
 }
