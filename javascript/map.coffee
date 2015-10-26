@@ -76,7 +76,7 @@ $(document).ready ->
     
     decodeURL = () ->
         # First, figure out where you are 
-        if /^\/(homein)\/?$/.test(location.pathname) # Are you on the index?
+        if /^\/(homein)?\/?$/.test(location.pathname) # Are you on the index?
             # Capture the facets in the location hash 
             facetsregex = /(\&|\#)((((bathrooms)|(rooms)|(price))=\d+(-\d+)?)|(for=(rent|sale)))/ig 
             if facetsregex.test(location.hash)
