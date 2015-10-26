@@ -42,19 +42,8 @@ $(document).ready ->
         
         mapOptions = 
             zoom: 3  # I want to be able to see everything. I'll figure out how to auto zoom to see all markers later 
-            center: center
         
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions)
-        
-        navigator.geolocation.getCurrentPosition((position) ->
-            pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            }
-            
-            map.setCenter(pos)
-            map.setZoom(14)
-        )
     
     delay = do ->
         timer = 0
