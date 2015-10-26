@@ -59,8 +59,10 @@ $(document).ready ->
         
         delay (->
             decodeURL()
+            $("#searchbar").blur()
             return 
         ), 500
+        
         return 
     
     decodeURL = () ->
