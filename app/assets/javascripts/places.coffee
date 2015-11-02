@@ -133,6 +133,16 @@ $(document).ready ->
             $("form .field #place_address").removeAttr("disabled")
             $("form .field #place_address").val(results[0].formatted_address)
         )
+        
+    getPosition = (callback) ->
+        if navigator.geolocation 
+            navigator.geolocation.getCurrentPosition((result) ->
+                position = new google.maps.LatLng(result.coords.latitude, result.coords.longitude)
+                callback(position)
+            , () ->
+                position = new google.maps.LatLng(37.0625,-95.677068)
+                callback(position) 
+            )
     
     decodeURL = () ->
         if /^\/(places)?\/?$/.test(location.pathname)
@@ -208,6 +218,29 @@ $(document).ready ->
                     setLatLng(marker.position)
                     reverseGeocode(marker.position)
                 ) 
+            )
+        else if /^\/places\/new\/?$/.test(location.pathname)
+            form = window.form 
+            window.form = undefined 
+            
+            getPosition((position) ->
+                initializeMap(position, 14, undefined, (map) ->
+                    marker = placeMarker(position, map, true)
+                    
+                    marker.addListener('click', () ->
+                        infoWindow.open(map, marker)
+                        setLatLng(marker.position)
+                        reverseGeocode(marker.position)
+                    ) 
+                    
+                    marker.addListener('dragend', () ->
+                        setLatLng(marker.position)
+                        reverseGeocode(marker.position)
+                    ) 
+                
+                    infoWindow.setContent(form)
+                    infoWindow.open(map, marker)
+                )
             )
             
     decodeURL()
