@@ -1,3 +1,4 @@
-<%= javascript_tag do %>
-    window.form = '<%= escape_javascript(render 'form') %>'
-<% end %>
+<script>
+    window.form = '<%= escape_javascript(render 'form') %>';
+    window.place = (<%= raw(@place.to_json) %>);
+</script>

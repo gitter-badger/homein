@@ -106,6 +106,34 @@ $(document).ready ->
         
         return content 
     
+    placeMarker = (center, map, draggable, content, callback) ->
+        marker = new google.maps.Marker 
+            position: center 
+            map: map 
+            draggable: draggable
+            
+        if content 
+            marker.content = content 
+            
+        return marker 
+        
+        if callback 
+            callback(marker)
+    
+    setLatLng = (position) ->
+        $("form .field #place_latitude").val(position.lat())
+        $("form .field #place_longitude").val(position.lng())
+    
+    reverseGeocode = (position, callback) ->
+        geocoder = new google.maps.Geocoder()
+        
+        $("form .field #place_address").attr("disabled", "disabled")
+        
+        geocoder.geocode( { 'latLng' : position }, (results, status) ->
+            $("form .field #place_address").removeAttr("disabled")
+            $("form .field #place_address").val(results[0].formatted_address)
+        )
+    
     decodeURL = () ->
         if /^\/(places)?\/?$/.test(location.pathname)
             search(getQuery(), getFacetFilters(), getNumericFilters(), (content) ->
@@ -125,13 +153,10 @@ $(document).ready ->
                     for result in results 
                         position = new google.maps.LatLng(result.latitude, result.longitude)
                         
-                        marker = new google.maps.Marker 
-                            position: position 
-                            map: map 
-                            draggable: false 
-                            content: getContent(result)
-                            title: result.description 
-                            
+                        marker = placeMarker(position, map, false, getContent(result))
+                        
+                        marker.title = result.description 
+                        
                         marker.addListener('click', () ->
                             infoWindow.setContent(this.content)
                             infoWindow.open(map, this) 
@@ -149,11 +174,7 @@ $(document).ready ->
             center = new google.maps.LatLng(place.latitude, place.longitude)
             
             initializeMap(center, 14, null, (map) ->
-                marker = new google.maps.Marker 
-                    position: center 
-                    map: map 
-                    draggable: false 
-                    content: getContent(place)
+                marker = placeMarker(center, map, false, getContent(place))
                 
                 infoWindow.setContent(marker.content)
                 infoWindow.open(map, marker)
@@ -161,6 +182,32 @@ $(document).ready ->
                 marker.addListener('click', () ->
                     infoWindow.open(map, marker)
                 )
+            )
+        else if /^\/places\/\d+\/edit\/?$/.test(location.pathname)
+            form = window.form 
+            window.form = undefined 
+            
+            place = window.place 
+            window.place = undefined 
+            
+            center = new google.maps.LatLng(place.latitude, place.longitude)
+            
+            initializeMap(center, 14, null, (map) ->
+                marker = placeMarker(center, map, true)
+                    
+                infoWindow.setContent(form)
+                infoWindow.open(map, marker)
+                
+                marker.addListener('click', () ->
+                    infoWindow.open(map, marker)
+                    setLatLng(marker.position)
+                    reverseGeocode(marker.position)
+                ) 
+                
+                marker.addListener('dragend', () ->
+                    setLatLng(marker.position)
+                    reverseGeocode(marker.position)
+                ) 
             )
             
     decodeURL()
