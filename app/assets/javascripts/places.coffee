@@ -88,7 +88,7 @@ $(document).ready ->
     
     getContent = (result) ->
         content = 
-            "<h1><a href=\"/places/#{result.objectID}/\">#{result.address}</a></h1>
+            "<h1><a href=\"/places/#{result.id}/\">#{result.address}</a></h1>
             <p>#{result.description.replace(/\n/, "<br />")}</p>
             <p>Rooms: #{result.rooms} Bathrooms: #{result.bathrooms}</p>
             <p>Price: $#{result.price}"
@@ -100,8 +100,8 @@ $(document).ready ->
         
         if typeof currentuser != 'undefined' && currentuser == result.user_id
             content += 
-                "<a href=\"/places/#{result.objectID}/edit\" class=\"place-management-link\"><i class=\"fa fa-pencil\" title=\"Edit place\"></i></a>
-                <a data-confirm=\"Are you sure you want to delete this place?\" rel=\"nofollow\" data-method=\"delete\" href=\"/places/#{result.objectID}\" class=\"place-management-link\"><i class=\"fa fa-trash-o\" title=\"Delete place\"></i></a>"
+                "<a href=\"/places/#{result.id}/edit\" class=\"place-management-link\"><i class=\"fa fa-pencil\" title=\"Edit place\"></i></a>
+                <a data-confirm=\"Are you sure you want to delete this place?\" rel=\"nofollow\" data-method=\"delete\" href=\"/places/#{result.id}\" class=\"place-management-link\"><i class=\"fa fa-trash-o\" title=\"Delete place\"></i></a>"
                 
         
         return content 
@@ -123,7 +123,6 @@ $(document).ready ->
                 center = bounds.getCenter()
                 initializeMap(center, 1, bounds, (map) ->  #Set an arbitrary zoom level to initialize the map, then zoom, pan to bounds 
                     for result in results 
-                        console.log result 
                         position = new google.maps.LatLng(result.latitude, result.longitude)
                         
                         marker = new google.maps.Marker 
@@ -141,6 +140,26 @@ $(document).ready ->
                         markers.push marker 
                     
                     markerClusterer = new MarkerClusterer(map, markers)
+                )
+            )
+        else if /^\/places\/\d+\/?$/.test(location.pathname)
+            place = window.place
+            window.place = undefined 
+            
+            center = new google.maps.LatLng(place.latitude, place.longitude)
+            
+            initializeMap(center, 14, null, (map) ->
+                marker = new google.maps.Marker 
+                    position: center 
+                    map: map 
+                    draggable: false 
+                    content: getContent(place)
+                
+                infoWindow.setContent(marker.content)
+                infoWindow.open(map, marker)
+                
+                marker.addListener('click', () ->
+                    infoWindow.open(map, marker)
                 )
             )
             

@@ -1,11 +1,3 @@
-<%= javascript_tag do %>
-    window.image_urls = []
-    
-    window.image_thumb_urls = []
-    
-    <% @place.pictures.each do |picture| %>
-        window.image_urls.push("<%= picture.image.url %>")
-        
-        window.image_thumb_urls.push("<%= picture.image.url(:small) %>")
-    <% end %>
-<% end %>
+<script>
+    window.place = (<%= raw(@place.to_json) %>);
+</script>
