@@ -7,6 +7,21 @@ class PlacesController < ApplicationController
     # GET /places.json
     def index
         @places = Place.all
+        
+        @facetsStats = {
+            "price" => {
+                "max" => Place.maximum(:price),
+                "min" => Place.minimum(:price)
+            },
+            "rooms" => {
+                "max" => Place.maximum(:rooms),
+                "min" => Place.minimum(:rooms)
+            },
+            "bathrooms" => {
+                "max" => Place.maximum(:bathrooms),
+                "min" => Place.minimum(:bathrooms)
+            }
+        }
     end
     
     def your_places 

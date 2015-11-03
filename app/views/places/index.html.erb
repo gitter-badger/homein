@@ -1,4 +1,23 @@
-<div id="facets-container"></div>
+<script type="text/javascript" charset="utf-8">
+  var facetsStats = <%= raw(@facetsStats.to_json) %>;
+</script>
+
+<div id="facets-container">
+    <% @facetsStats.keys.each do |facet| %>
+        <div class="facet" id="<%= facet %>">
+            <%= facet.capitalize %>: 
+            <% if facet == "price" %>
+                $
+            <% end %>
+            <input type="number" step="1" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+            <div class="slider" data-facet="<%= facet %>" data-min="<%= @facetsStats[facet]["min"] %>" data-max="<%= @facetsStats[facet]["max"] %>"></div>
+            <% if facet == "price" %>
+                $
+            <% end %>
+            <input type="number" step="1" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+        </div>
+    <% end %>
+</div>
 
 <div id="options-container">
     <span><i class="fa fa-search"></i><input id="searchbar" name="query" placeholder="Search places" type="text"></span>

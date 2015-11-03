@@ -35,23 +35,15 @@ html, body, #map-canvas {
         border-radius: 2px;
         box-shadow: 5px 5px 10px rgba(109, 109, 109, 0.25);
         
-        .facet-container {
-            display: flex;
-            justify-content: center;
-            height: 30px;
-            margin: 10px 0;
-            
-            p {
-                width: 360px;
-                margin: 0 10px 0 0;
+        #facets-container {
+            .facet {
+                display: flex;
+                margin: 10px 0;
                 
-                input {
-                    width: 50px;
+                .slider {
+                    flex-grow: 2;
+                    margin: 0 20px;
                 }
-            }
-            
-            .ui-slider {
-                width: 100%;
             }
         }
         

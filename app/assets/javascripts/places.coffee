@@ -73,18 +73,19 @@ $(document).ready ->
     getNumericFilters = () ->
         numericFilters = []
             
-        numericFiltersRegex = /(?:&|#)(bathrooms|rooms|price)=((?:\d+)(?:-\d+)?)(?=&)?/g;
+        numericFiltersRegex = /(?:&|#)(bathrooms|rooms|price)=((?:\d+)(?:-\d+)?)(?=&)?/g
         
         numericFiltersMatch = numericFiltersRegex.exec(location.hash)
         
         while numericFiltersMatch != null 
-            console.log numericFiltersMatch[2]
             if /-/.test(numericFiltersMatch[2])
                 numericFilters.push numericFiltersMatch[1] + ":" + numericFiltersMatch[2].replace("-", " to ")
             else 
                 numericFilters.push numericFiltersMatch[1] + "=" + numericFiltersMatch[2]
             
             numericFiltersMatch = numericFiltersRegex.exec(location.hash)
+            
+        return numericFilters
     
     getContent = (result) ->
         content = 
@@ -143,6 +144,109 @@ $(document).ready ->
                 position = new google.maps.LatLng(37.0625,-95.677068)
                 callback(position) 
             )
+    encodeURL = (facet, values) ->
+        valueString = values.join('-')
+        
+        regex = RegExp("(&|#)(#{facet})=(?:\\w(?:-\\d)?)*(&|$)", "g")
+        
+        if regex.test(location.hash)
+            location.hash = location.hash.replace(regex, "$1$2=#{valueString}$3")
+        else 
+            if /^#?$/.test(location.hash)
+                location.hash += "#{facet}=#{valueString}"
+            else 
+                location.hash += "&#{facet}=#{valueString}"
+        
+    
+    renderFacets = (query, facetFilters, numericFilters, map, markers, markerClusterer) ->
+        facetsStats = window.facetsStats
+        window.facetsStats = undefined 
+        
+        values = 
+            "price": 
+                "min": facetsStats.price.min
+                "max": facetsStats.price.max
+            "bathrooms":
+                "min": facetsStats.bathrooms.min
+                "max": facetsStats.bathrooms.max
+            "rooms":
+                "min": facetsStats.rooms.min
+                "max": facetsStats.rooms.max
+        
+        for numericFilter in numericFilters
+            if numericFilter.split(/:|=/)[1].split(" to ")[1] != undefined 
+                values[numericFilter.split(/:|=/)[0]] = 
+                    "min": parseInt(numericFilter.split(/:|=/)[1].split(" to ")[0])
+                    "max": parseInt(numericFilter.split(/:|=/)[1].split(" to ")[1])
+            else 
+                values[numericFilter.split(/:|=/)[0]] = 
+                    "min": facetsStats[numericFilter.split(/:|=/)[0]].min
+                    "max": parseInt(numericFilter.split(/:|=/)[1].split(" to ")[0])
+        
+        $("#facets-container .slider").slider
+            range: true,
+            create: () ->
+                $(this).slider( "option", "min", $(this).data("min") )
+                $(this).slider( "option", "max", $(this).data("max") )
+                $(this).slider( "option", "values", [ values[$(this).data("facet")]['min'], values[$(this).data("facet")].max ] )
+            stop: (event, ui) ->
+                ui.handle.parentElement.previousElementSibling.value = ui.values[0]
+                ui.handle.parentElement.nextElementSibling.value = ui.values[1]
+                
+                facet = ui.handle.parentElement.dataset.facet 
+                
+                values = [
+                    ui.values[0]
+                    ui.values[1]
+                ]
+                
+                encodeURL(facet, values)
+                
+                search(getQuery(), getFacetFilters(), getNumericFilters(), (content) ->
+                    markers.map((marker, index) ->
+                        marker.setMap(null)
+                        markerClusterer.removeMarker(marker)
+                    )
+                    
+                    markers.length = 0
+                    
+                    bounds = new google.maps.LatLngBounds()
+                    
+                    results = content.hits 
+                    
+                    for result in results 
+                        position = new google.maps.LatLng(result.latitude, result.longitude)
+                        
+                        marker = placeMarker(position, map, false, getContent(result))
+                        
+                        marker.title = result.description 
+                        
+                        marker.addListener('click', () ->
+                            infoWindow.setContent(this.content)
+                            infoWindow.open(map, this) 
+                        )
+                            
+                        markers.push marker 
+                        
+                        bounds.extend(position)
+                    
+                    map.fitBounds(bounds)
+                    map.panToBounds(bounds)
+                    
+                    markerClusterer = new MarkerClusterer(map, markers)
+                )
+            slide: (event, ui) ->
+                ui.handle.parentElement.previousElementSibling.value = ui.values[0]
+                ui.handle.parentElement.nextElementSibling.value = ui.values[1]
+                
+                facet = ui.handle.parentElement.dataset.facet 
+                
+                values = [
+                    ui.values[0]
+                    ui.values[1]
+                ]
+                
+                encodeURL(facet, values)
     
     decodeURL = () ->
         if /^\/(places)?\/?$/.test(location.pathname)
@@ -159,6 +263,7 @@ $(document).ready ->
                     bounds.extend(position)
                 
                 center = bounds.getCenter()
+                
                 initializeMap(center, 1, bounds, (map) ->  #Set an arbitrary zoom level to initialize the map, then zoom, pan to bounds 
                     for result in results 
                         position = new google.maps.LatLng(result.latitude, result.longitude)
@@ -175,6 +280,8 @@ $(document).ready ->
                         markers.push marker 
                     
                     markerClusterer = new MarkerClusterer(map, markers)
+                    
+                    renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer)
                 )
             )
         else if /^\/places\/\d+\/?$/.test(location.pathname)
