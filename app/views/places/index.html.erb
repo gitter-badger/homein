@@ -9,12 +9,12 @@
             <% if facet == "price" %>
                 $
             <% end %>
-            <input type="number" step="1" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+            <input type="number" step="1" data-facet="<%= facet %>" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
             <div class="slider" data-facet="<%= facet %>" data-min="<%= @facetsStats[facet]["min"] %>" data-max="<%= @facetsStats[facet]["max"] %>"></div>
             <% if facet == "price" %>
                 $
             <% end %>
-            <input type="number" step="1" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+            <input type="number" step="1" data-facet="<%= facet %>" class="maximum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
         </div>
     <% end %>
 </div>

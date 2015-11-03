@@ -172,6 +172,12 @@ $(document).ready ->
             "rooms":
                 "min": facetsStats.rooms.min
                 "max": facetsStats.rooms.max
+                
+        for inputBox in $("#facets-container .facet input[type=number].minimum")
+            inputBox.value = values[inputBox.dataset["facet"]]["min"]
+            
+        for inputBox in $("#facets-container .facet input[type=number].maximum")
+            inputBox.value = values[inputBox.dataset["facet"]]["max"]
         
         for numericFilter in numericFilters
             if numericFilter.split(/:|=/)[1].split(" to ")[1] != undefined 
