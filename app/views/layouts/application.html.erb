@@ -39,7 +39,7 @@
     		<%= link_to root_path, :title => "Home" do %>
     		    <i class="fa fa-home"></i>
     		<% end %>
-        	<%= link_to page_path(id: "currentuser"), :id => "logged_in", :title => "View your places" do %>
+        	<%= link_to current_user_places_path, :id => "logged_in", :title => "View your places" do %>
                 <i class="fa fa-user"></i>
         	<% end %>
     	    <%= link_to destroy_user_session_path, :method => :delete, :id => "logout", :title => "Logout" do %>

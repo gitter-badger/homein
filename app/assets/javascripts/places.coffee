@@ -242,5 +242,37 @@ $(document).ready ->
                     infoWindow.open(map, marker)
                 )
             )
+        else if /^\/you\/?$/.test(location.pathname)
+            places = window.places 
+            window.places = undefined
+            
+            bounds = new google.maps.LatLngBounds()
+            
+            markers = []
+            
+            for place in places 
+                position = new google.maps.LatLng(place.latitude, place.longitude)
+                
+                bounds.extend(position)
+                
+            center = bounds.getCenter()
+            
+            initializeMap(center, 1, bounds, (map) ->  #Set an arbitrary zoom level to initialize the map, then zoom, pan to bounds 
+                for place in places
+                    position = new google.maps.LatLng(place.latitude, place.longitude)
+                    
+                    marker = placeMarker(position, map, false, getContent(place))
+                    
+                    marker.title = place.description 
+                    
+                    marker.addListener('click', () ->
+                        infoWindow.setContent(this.content)
+                        infoWindow.open(map, this) 
+                    )
+                
+                    markers.push marker 
+                
+                markerClusterer = new MarkerClusterer(map, markers)
+            )
             
     decodeURL()

@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   end 
   root 'places#index'
   
-  post 'places/search' => 'places#search', as: 'search_places'
+  get 'you' => 'places#your_places', as: 'current_user_places'
 end
