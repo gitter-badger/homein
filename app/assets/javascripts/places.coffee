@@ -121,6 +121,10 @@ $(document).ready ->
         
         content += "</p>"
         
+        if result.pictures 
+            for picture in result.pictures 
+                content += "<a href=\"#{picture}\" target=\"_blank\"><img src=\"#{picture}\" /></a>"
+        
         if typeof currentuser != 'undefined' && currentuser == result.user_id
             content += 
                 "<a href=\"/places/#{result.id}/edit\" class=\"place-management-link\"><i class=\"fa fa-pencil\" title=\"Edit place\"></i></a>
@@ -313,7 +317,6 @@ $(document).ready ->
             )
         else if /^\/places\/\d+\/?$/.test(location.pathname)
             place = window.place
-            window.place = undefined 
             
             center = new google.maps.LatLng(place.latitude, place.longitude)
             

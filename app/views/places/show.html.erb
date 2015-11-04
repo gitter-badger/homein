@@ -1,3 +1,9 @@
 <script>
     window.place = <%= raw(@place.to_json) %>;
+    
+    window.place.pictures = [];
+    
+    <% @place.pictures.each do |picture| %>
+        window.place.pictures.push("<%= picture.image.url %>")
+    <% end %>
 </script>
