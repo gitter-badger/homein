@@ -18,6 +18,9 @@ $(document).ready ->
     
     infoWindow = new google.maps.InfoWindow
     
+    facetsStats = window.facetsStats
+    window.facetsStats = undefined 
+    
     initializeMap = (center, zoom, bounds, callback) ->
         map = new google.maps.Map(document.getElementById('map-canvas'), 
             zoom: zoom
@@ -56,7 +59,26 @@ $(document).ready ->
             query = queryMatch[1]
         
         return query 
+    
+    delay = do ->
+        timer = 0
+        (callback, ms) ->
+            clearTimeout timer
+            timer = setTimeout(callback, ms)
+            return
+
+    
+    $("#searchbar").keyup ->
+        value = [ this.value ]
         
+        encodeURL("query", value)
+        
+        delay (->
+            decodeURL()
+            return 
+        ), 500
+        return 
+    
     getFacetFilters = () ->
         facetFilters = []
         
@@ -159,9 +181,6 @@ $(document).ready ->
         
     
     renderFacets = (query, facetFilters, numericFilters, map, markers, markerClusterer) ->
-        facetsStats = window.facetsStats
-        window.facetsStats = undefined 
-        
         values = 
             "price": 
                 "min": facetsStats.price.min
@@ -178,6 +197,8 @@ $(document).ready ->
             
         for inputBox in $("#facets-container .facet input[type=number].maximum")
             inputBox.value = values[inputBox.dataset["facet"]]["max"]
+        
+        $("#searchbar").val(getQuery())
         
         for numericFilter in numericFilters
             if numericFilter.split(/:|=/)[1].split(" to ")[1] != undefined 
