@@ -381,7 +381,6 @@ $(document).ready ->
             )
         else if /^\/you\/?$/.test(location.pathname)
             places = window.places 
-            window.places = undefined
             
             bounds = new google.maps.LatLngBounds()
             

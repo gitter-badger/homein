@@ -12,4 +12,8 @@ class Place < ActiveRecord::Base
 	algoliasearch index_name: "homein_places", per_environment: true do 
 	    attributesForFaceting [:rooms, :bathrooms, :price, :for]
 	end 
+	
+	def picture_urls
+      self.pictures.map { |p| p.image.url }
+    end
 end

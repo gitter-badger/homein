@@ -24,9 +24,18 @@ class PlacesController < ApplicationController
         }
     end
     
+    
     def your_places 
         @places = Place.where(user_id: current_user.id) 
-    end 
+        puts "@places: #{@places.inspect}" 
+        
+        @places.map do |place| 
+        puts "place: #{place.inspect}" 
+            { 
+                picture_urls => place.picture_urls # use picture_urls method here 
+            } 
+        end 
+    end
     
     # GET /places/1
     # GET /places/1.json
