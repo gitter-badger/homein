@@ -182,7 +182,12 @@ $(document).ready ->
                 location.hash += "#{facet}=#{valueString}"
             else 
                 location.hash += "&#{facet}=#{valueString}"
-        
+    
+    getDeviceOrientation = () ->
+        if window.innerWidth > window.innerHeight 
+            return "vertical"
+        else
+            return "horizontal"
     
     renderFacets = (query, facetFilters, numericFilters, map, markers, markerClusterer) ->
         values = 
@@ -202,7 +207,7 @@ $(document).ready ->
         for inputBox in $("#facets-container .facet input[type=number].maximum")
             inputBox.value = values[inputBox.dataset["facet"]]["max"]
         
-        $("#searchbar").val(getQuery())
+        $("#searchbar").val(getQuery()) 
         
         for numericFilter in numericFilters
             if numericFilter.split(/:|=/)[1].split(" to ")[1] != undefined 
@@ -214,9 +219,29 @@ $(document).ready ->
                     "min": facetsStats[numericFilter.split(/:|=/)[0]].min
                     "max": parseInt(numericFilter.split(/:|=/)[1].split(" to ")[0])
         
+        facetsContainerContent = ""
+        
+        for facet of values
+            facetsContainerContent += "<div class=\"#{facet}\" id=\"#{facet}\">
+                    #{facet.capitalizeFirstLetter()}: "
+    
+            if facet == "price"
+                facetsContainerContent += "$"
+            
+            facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet}\" class=\"minimum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\">
+                <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{values[facet]["min"]}\" data-max=\"#{values[facet]["max"]}\"></div>"
+            
+            if facet == "price"
+                facetsContainerContent += "$"
+                
+            facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet} %>\" class=\"maximum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\"></div>"
+            
+        $("#facets-container").html(facetsContainerContent)
+        
         $("#facets-container .slider").slider
             range: true,
             create: () ->
+                $(this).slider( "option", "orientation", getDeviceOrientation() )
                 $(this).slider( "option", "min", $(this).data("min") )
                 $(this).slider( "option", "max", $(this).data("max") )
                 $(this).slider( "option", "values", [ values[$(this).data("facet")]['min'], values[$(this).data("facet")].max ] )
@@ -313,6 +338,9 @@ $(document).ready ->
                     markerClusterer = new MarkerClusterer(map, markers)
                     
                     renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer)
+                    
+                    window.addEventListener 'resize', ->
+                        renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer)
                 )
             )
         else if /^\/places\/\d+\/?$/.test(location.pathname)

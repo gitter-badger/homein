@@ -1,0 +1,23 @@
+@mixin flex-direction() {
+    @media screen {
+        @media (orientation: landscape) {
+            flex-direction: row;
+        }
+        
+        @media (orientation: portrait) {
+            flex-direction: column;
+        }
+    }
+}
+
+@mixin flex-direction-inverse() {
+    @media screen {
+        @media (orientation: landscape) {
+            flex-direction: column;
+        }
+        
+        @media (orientation: portrait) {
+            flex-direction: row;
+        }
+    }
+}

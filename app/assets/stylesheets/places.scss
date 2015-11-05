@@ -25,14 +25,19 @@ body {
     
     .container#main_container {
         display: flex;
+        flex-direction: column;
         flex-grow: 1;
         background-color: rgba(255, 255, 255, 0.8);
         box-sizing: border-box;
         padding: 15px;
         
         #facets-container {
+            display: flex;
+            @include flex-direction();
+            
             .facet {
                 display: flex;
+                @include flex-direction-inverse();
                 margin: 10px 0;
                 
                 .slider {
