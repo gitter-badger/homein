@@ -20,29 +20,34 @@ body {
     
     #map-canvas {
         display: flex;
-        flex-grow: 3;
+        flex-grow: 1;
     }
     
     .container#main_container {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
-        background-color: rgba(255, 255, 255, 0.8);
-        box-sizing: border-box;
         padding: 15px;
+        box-sizing: border-box;
         
         #facets-container {
             display: flex;
+            flex-grow: 1;
+            justify-content: center;
             @include flex-direction();
             
             .facet {
                 display: flex;
                 @include flex-direction-inverse();
+                align-items: center;
                 margin: 10px 0;
+                
+                input {
+                    height: 1em;
+                }
                 
                 .slider {
                     flex-grow: 2;
-                    margin: 0 20px;
+                    margin: 20px;
                 }
             }
         }
