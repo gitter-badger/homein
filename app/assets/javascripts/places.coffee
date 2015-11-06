@@ -66,18 +66,6 @@ $(document).ready ->
             clearTimeout timer
             timer = setTimeout(callback, ms)
             return
-
-    
-    $("#searchbar").keyup ->
-        value = [ this.value ]
-        
-        encodeURL("query", value)
-        
-        delay (->
-            decodeURL()
-            return 
-        ), 500
-        return 
     
     getFacetFilters = () ->
         facetFilters = []
@@ -350,6 +338,48 @@ $(document).ready ->
                     
                     window.addEventListener 'resize', ->
                         renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer, getFacetSliderOrientation())
+                        
+                    $("#searchbar").keyup ->
+                        value = [ this.value ]
+                        
+                        encodeURL("query", value)
+                        
+                        delay (->
+                            search(getQuery(), getFacetFilters(), getNumericFilters(), (content) ->
+                                markers.map((marker, index) ->
+                                    marker.setMap(null)
+                                    markerClusterer.removeMarker(marker)
+                                )
+                                
+                                markers.length = 0
+                                
+                                bounds = new google.maps.LatLngBounds()
+                                
+                                results = content.hits 
+                                
+                                for result in results 
+                                    position = new google.maps.LatLng(result.latitude, result.longitude)
+                                    
+                                    marker = placeMarker(position, map, false, getContent(result))
+                                    
+                                    marker.title = result.description 
+                                    
+                                    marker.addListener('click', () ->
+                                        infoWindow.setContent(this.content)
+                                        infoWindow.open(map, this) 
+                                    )
+                                        
+                                    markers.push marker 
+                                    
+                                    bounds.extend(position)
+                                
+                                map.fitBounds(bounds)
+                                map.panToBounds(bounds)
+                                
+                                markerClusterer = new MarkerClusterer(map, markers)
+                            )
+                        ), 500
+                        return 
                 )
             )
         else if /^\/places\/\d+\/?$/.test(location.pathname)
