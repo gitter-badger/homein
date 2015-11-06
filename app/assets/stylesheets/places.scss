@@ -21,6 +21,15 @@ body {
     #map-canvas {
         display: flex;
         flex-grow: 1;
+        
+        #place_pictures {
+            display: flex; 
+            justify-content: center; 
+            
+            .place_picture {
+                width: 150px;
+            }
+        }
     }
     
     .container#main_container {
@@ -41,20 +50,37 @@ body {
                 align-items: center;
                 margin: 10px 0;
                 
-                input {
+                input[type=number] {
                     height: 1em;
+                    border: none;
                 }
                 
                 .slider {
                     flex-grow: 2;
-                    margin: 20px;
+                    @include slider-margins();
                 }
             }
         }
         
         #options-container {
             margin: 10px 0;
+            display: flex;
             justify-content: center;
+            @include flex-direction-inverse();
+            
+            #search {
+                flex-grow: 1;
+                    
+                #searchbar {
+                    height: 100%;
+                    border: none;
+                }
+                
+                
+                #searchbar:focus {
+                    outline: none;
+                }
+            }
             
             i, ul, span {
                 height: 30px;
@@ -62,15 +88,6 @@ body {
                 
                 i {
                     height: auto;
-                }
-                
-                #searchbar {
-                    height: 100%;
-                    border: none;
-                }
-                
-                #searchbar:focus {
-                    outline: none;
                 }
             }
             

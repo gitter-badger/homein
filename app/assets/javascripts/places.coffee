@@ -122,8 +122,10 @@ $(document).ready ->
         content += "</p>"
         
         if result.pictures 
+            content += "<span id=\"place_pictures\">"
             for picture in result.pictures 
-                content += "<a href=\"#{picture}\" target=\"_blank\"><img src=\"#{picture}\" /></a>"
+                content += "<a href=\"#{picture}\" class=\"place_picture_link\" target=\"_blank\"><img class=\"place_picture\" src=\"#{picture}\" /></a>"
+            content += "</span>"
         
         if typeof currentuser != 'undefined' && currentuser == result.user_id
             content += 
