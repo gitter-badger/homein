@@ -337,7 +337,7 @@ $(document).ready ->
                     renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer, getFacetSliderOrientation())
                     
                     window.addEventListener 'resize', ->
-                        renderFacets(getQuery(), getFacetFilters(), getNumericFilters(), map, markers, markerClusterer, getFacetSliderOrientation())
+                        $("#facets-container .slider").slider("option", "orientation", getFacetSliderOrientation())
                         
                     $("#searchbar").keyup ->
                         value = [ this.value ]
