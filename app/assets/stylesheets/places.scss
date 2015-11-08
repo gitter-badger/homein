@@ -50,14 +50,21 @@ body {
                 align-items: center;
                 margin: 10px 0;
                 
-                input[type=number] {
-                    height: 1em;
-                    border: none;
-                }
-                
-                .slider {
-                    flex-grow: 2;
-                    @include slider-margins();
+                .inputContainer {
+                    display: flex;
+                    align-items: center;
+                    flex-grow: 1;
+                    @include flex-direction-inverse-reverse();
+                    
+                    input[type=number] {
+                        height: 1em;
+                        border: none;
+                    }
+                    
+                    .slider {
+                        flex-grow: 2;
+                        @include slider-margins();
+                    }
                 }
             }
         }

@@ -3,6 +3,26 @@
 </script>
 
 <div id="facets-container">
+    <% @facetsStats.keys.each do |facet| %>
+        <div class="facet" id="<%= facet %>">
+            <%= facet.capitalize %>: 
+            <span class="inputContainer">
+                <span>
+                    <% if facet == "price" %>
+                        $
+                    <% end %>
+                    <input type="number" step="1" data-facet="<%= facet %>" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+                </span>
+                <div class="slider" data-facet="<%= facet %>" data-min="<%= @facetsStats[facet]["min"] %>" data-max="<%= @facetsStats[facet]["max"] %>"></div>
+                <span>
+                    <% if facet == "price" %>
+                        $
+                    <% end %>
+                    <input type="number" step="1" data-facet="<%= facet %>" class="maximum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+                </span>
+            </span>
+        </div>
+    <% end %>
 </div>
 
 <div id="options-container">

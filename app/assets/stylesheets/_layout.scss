@@ -22,6 +22,18 @@
     }
 }
 
+@mixin flex-direction-inverse-reverse() {
+    @media screen {
+        @media (orientation: landscape) {
+            flex-direction: column-reverse;
+        }
+        
+        @media (orientation: portrait) {
+            flex-direction: row;
+        }
+    }
+}
+
 @mixin slider-margins() {
     @media screen {
         @media (orientation: landscape) {

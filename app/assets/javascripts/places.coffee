@@ -191,33 +191,7 @@ $(document).ready ->
                 "min": facetsStats.rooms.min
                 "max": facetsStats.rooms.max
         
-        $("#searchbar").val(getQuery()) 
-        
-        facetsContainerContent = ""
-        
-        for facet of values
-            facetsContainerContent += "<div class=\"facet\" id=\"#{facet}\">
-                    #{facet.capitalizeFirstLetter()}: <span>"
-    
-            if facet == "price"
-                facetsContainerContent += "$"
-            
-            if orientation == "vertical"
-                facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet}\" class=\"maximum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\"></span>
-                    <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{values[facet]["min"]}\" data-max=\"#{values[facet]["max"]}\"></div><span>"
-            else if orientation == "horizontal"
-                facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet}\" class=\"minimum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\"></span>
-                    <div class=\"slider\" data-facet=\"#{facet}\" data-min=\"#{values[facet]["min"]}\" data-max=\"#{values[facet]["max"]}\"></div><span>"
-            
-            if facet == "price"
-                facetsContainerContent += "$"
-                
-            if orientation == "vertical"
-                facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet}\" class=\"minimum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\"></div>"
-            else if orientation == "horizontal"
-                facetsContainerContent += "<input type=\"number\" step=\"1\" data-facet=\"#{facet}\" class=\"maximum\" min=\"#{values[facet]["min"]}\" max=\"#{values[facet]["max"]}\"></div>"
-            
-        $("#facets-container").html(facetsContainerContent)
+        $("#searchbar").val(getQuery())
         
         for numericFilter in numericFilters
             if numericFilter.split(/:|=/)[1].split(" to ")[1] != undefined 
