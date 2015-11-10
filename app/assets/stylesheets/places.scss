@@ -41,29 +41,37 @@ body {
         #facets-container {
             display: flex;
             flex-grow: 1;
+            flex-wrap: wrap;
             justify-content: center;
-            @include flex-direction();
+            @include flex-direction-inverse();
             
-            .facet {
+            #slider-container {
                 display: flex;
-                @include flex-direction-inverse();
-                align-items: center;
-                margin: 10px 0;
+                @include flex-direction();
+                width: 100%;
+                flex-grow: 1;
                 
-                .inputContainer {
+                .facet {
                     display: flex;
+                    @include flex-direction-inverse();
                     align-items: center;
-                    flex-grow: 1;
-                    @include flex-direction-inverse-reverse();
+                    margin: 10px 0;
                     
-                    input[type=number] {
-                        height: 1em;
-                        border: none;
-                    }
-                    
-                    .slider {
-                        flex-grow: 2;
-                        @include slider-margins();
+                    .inputContainer {
+                        display: flex;
+                        align-items: center;
+                        flex-grow: 1;
+                        @include flex-direction-inverse-reverse();
+                        
+                        input[type=number] {
+                            height: 1em;
+                            border: none;
+                        }
+                        
+                        .slider {
+                            flex-grow: 2;
+                            @include slider-margins();
+                        }
                     }
                 }
             }

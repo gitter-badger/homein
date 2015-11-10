@@ -3,27 +3,37 @@
 </script>
 
 <div id="facets-container">
-    <% @facetsStats.keys.each do |facet| %>
-        <div class="facet" id="<%= facet %>">
-            <%= facet.capitalize %>: 
-            <span class="inputContainer">
-                <span>
-                    <% if facet == "price" %>
-                        $
-                    <% end %>
-                    <input type="number" step="1" data-facet="<%= facet %>" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+    <span class="container" id="slider-container">
+        <% @facetsStats.keys.each do |facet| %>
+            <div class="facet" id="<%= facet %>">
+                <%= facet.capitalize %>: 
+                <span class="inputContainer">
+                    <span>
+                        <% if facet == "price" %>
+                            $
+                        <% end %>
+                        <input type="number" step="1" data-facet="<%= facet %>" class="minimum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+                    </span>
+                    <div class="slider" data-facet="<%= facet %>" data-min="<%= @facetsStats[facet]["min"] %>" data-max="<%= @facetsStats[facet]["max"] %>"></div>
+                    <span>
+                        <% if facet == "price" %>
+                            $
+                        <% end %>
+                        <input type="number" step="1" data-facet="<%= facet %>" class="maximum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
+                    </span>
                 </span>
-                <div class="slider" data-facet="<%= facet %>" data-min="<%= @facetsStats[facet]["min"] %>" data-max="<%= @facetsStats[facet]["max"] %>"></div>
-                <span>
-                    <% if facet == "price" %>
-                        $
-                    <% end %>
-                    <input type="number" step="1" data-facet="<%= facet %>" class="maximum" min="<%= @facetsStats[facet]["min"] %>" max="<%= @facetsStats[facet]["max"] %>">
-                </span>
-            </span>
-        </div>
-    <% end %>
+            </div>
+        <% end %>
+    </span>
+    
+    <span>
+        For: 
+        <select name='place_for' class="facet" id="place_for">
+          <option value='sale'>Sale</option>
+          <option value='rent'>Rent</option>
+        </select>  
+    </span>
+    <span id="search"><i class="fa fa-search"></i><input id="searchbar" name="query" placeholder="Search places" type="text"></span>
 </div>
 
 <div id="options-container">
-    <span id="search"><i class="fa fa-search"></i><input id="searchbar" name="query" placeholder="Search places" type="text"></span>
